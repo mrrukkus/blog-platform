@@ -1,10 +1,8 @@
-import styles from './Post.css';
+import './Post.css';
 
-console.log(styles);
-
-const Post = () => {
+const Post = ({ post }) => {
   return (
-    <div className="post">
+    <li className="post">
       <div className="post__content">
         <div className="post__title-area">
           <h2>Some article title</h2>
@@ -30,7 +28,7 @@ const Post = () => {
         </div>
         <img src="./user.png" alt="user" className="post-author__image"/>
       </div>
-    </div>
+    </li>
   )
 };
 
