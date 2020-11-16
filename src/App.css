@@ -7,11 +7,13 @@
   font-size: 18px;
   line-height: 28px;
   font-weight: 400;
+  margin: 0;
 }
 
 .header-wrapper {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin: auto;
   width: 1440px;
   padding: 16px 22px 13px;
@@ -38,4 +40,12 @@
   border-radius: 5px;
 }
 
+.app-main {
+  background-color: #EBEEF3;
+  padding: 26px 0 26px;
+}
 
+.app-main-wrapper {
+  width: 941px;
+  margin: auto;
+}

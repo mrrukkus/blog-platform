@@ -1,4 +1,5 @@
 import './App.css';
+import Post from "./components/Post/Post.jsx";
 
 function App() {
   return (
@@ -12,7 +13,13 @@ function App() {
           </div>
         </div>
       </header>
+      <main className="app-main">
+        <div className="app-main-wrapper">
+          <Post/>
+        </div>
       {/* компонент */}
+
+      </main>
     </>
   );
 };

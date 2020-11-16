@@ -1,0 +1,100 @@
+.post {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 14px 24px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.post__content {
+  width: 650px;
+}
+
+.post__title-area {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.post__title-area h2 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+  color: #1890ff;
+  margin: 0;
+}
+
+.post__title-area h2 {
+  margin-right: 12px;
+}
+
+.post__like {
+  display: flex;
+}
+
+.post__like input {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+}
+
+.post__like input ~ svg {
+  margin-right: 4px;
+}
+
+.post__like input:checked ~ svg {
+  fill: red;
+}
+
+.post__likes-count {
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.post__tags {
+  display: flex;
+  margin-bottom: 4px;
+}
+
+.post__tag {
+  font-weight: normal;
+  margin-right: 8px;
+  font-size: 12px;
+  line-height: 15px;
+  padding: 2px 5px 3px 4px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+}
+
+.post__description {
+  font-size: 12px;
+  line-height: 22px;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.post-author {
+  display: flex;
+  align-items: flex-start;
+}
+
+.post-author__name-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding-right: 12px;
+}
+
+.post-author__name {
+  font-size: 18px;
+  line-height: 28px;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.post-author__date {
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(0, 0, 0, 0.5);
+}
