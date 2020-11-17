@@ -1,5 +1,6 @@
 import './App.css';
 import Post from "./components/Post/Post.jsx";
+import Pagination from '../src/components/Pagination/Pagination.jsx';
 
 function App() {
   return (
@@ -16,9 +17,8 @@ function App() {
       <main className="app-main">
         <div className="app-main-wrapper">
           <Post/>
+          <Pagination />
         </div>
-      {/* компонент */}
-
       </main>
     </>
   );
