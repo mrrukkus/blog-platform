@@ -10,10 +10,10 @@ const EditProfile = () => {
         <input type="text" id="username" placeholder="Username"/>
 
         <label htmlFor="email">Email address</label>
-        <input type="text" id="email" placeholder="email"/>
+        <input type="text" id="email" placeholder="Email"/>
 
         <label htmlFor="password">New password</label>
-        <input type="password" id="password" placeholder="Password"/>
+        <input type="password" id="password" placeholder="New password"/>
 
         <label htmlFor="avatar">Avatar image (url)</label>
         <input type="text" id="avatar" placeholder="Avatar image"/>

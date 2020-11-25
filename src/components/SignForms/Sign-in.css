@@ -54,7 +54,17 @@
   text-align: center;
 }
 
-.popup-form__sign-up-link {
+.popup-form__sign-link {
   text-decoration: none;
   color: #1890FF;
+}
+
+#password {
+  position: relative;
+}
+
+#password:invalid::before {
+  content: "Your password needs to be at least 6 characters.";
+  color: red;
+  position: absolute;
 }
