@@ -1,3 +1,8 @@
+#root {
+  min-height: 100vh;
+  background-color: #EBEEF3;
+}
+
 .app-header {
   width: 100%;
   background-color: white;
@@ -15,7 +20,7 @@
   justify-content: space-between;
   align-items: center;
   margin: auto;
-  width: 1440px;
+  max-width: 1440px;
   padding: 16px 22px 13px;
 }
 
@@ -41,11 +46,10 @@
 }
 
 .app-main {
-  background-color: #EBEEF3;
   padding: 26px 0 26px;
 }
 
 .app-main-wrapper {
-  width: 941px;
+  max-width: 941px;
   margin: auto;
 }

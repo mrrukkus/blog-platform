@@ -79,7 +79,9 @@
 
 .post-author {
   display: flex;
+  justify-content: flex-end;
   align-items: flex-start;
+  min-width: 155px;
 }
 
 .post-author__name-wrapper {
