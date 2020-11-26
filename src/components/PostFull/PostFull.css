@@ -80,9 +80,15 @@
 
 .post-author {
   display: flex;
+  flex-direction: column;
+}
+
+.post-author__author-information {
+  display: flex;
   justify-content: flex-end;
   align-items: flex-start;
   min-width: 155px;
+  margin-bottom: 30px;
 }
 
 .post-author__name-wrapper {
@@ -101,4 +107,30 @@
   font-size: 12px;
   line-height: 16px;
   color: rgba(0, 0, 0, 0.5);
+}
+
+.post-author__control-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  font-size: 14px;
+  line-height: 22px;
+  background-color: transparent;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.button--delete {
+  border: 1px solid #F5222D;
+  padding: 6px 17px 5px;
+  color: #F5222D;
+  margin-right: 12px;
+}
+
+.button--edit {
+  border: 1px solid #52C41A;
+  padding: 6px 23px 5px 19px;
+  color: #52C41A;
 }

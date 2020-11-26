@@ -1,9 +1,10 @@
 import './App.css';
-import Post from "./components/Post/Post.jsx";
+// import Post from "./components/Post/Post.jsx";
 // import Pagination from './components/Pagination/Pagination.jsx';
 // import SignIn from './components/Sign-in/Sign-in.jsx';
 // import EditProfile from './components/Edit-profile/Edit-profile.jsx';
 // import CreateNewProfile from './components/SignForms/CreateNewAccount/Create-new-profile.jsx';
+import PostFull from './components/PostFull/PostFull.jsx';
 
 function App() {
   return (
@@ -19,12 +20,12 @@ function App() {
       </header>
       <main className="app-main">
         <div className="app-main-wrapper">
-          <Post/>
+          {/* <Post/> */}
           {/* <Pagination /> */}
           {/* <SignIn/> */}
           {/* <EditProfile/> */}
           {/* <CreateNewProfile/> */}
-
+          <PostFull/>
         </div>
       </main>
     </>

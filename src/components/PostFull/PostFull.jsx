@@ -1,6 +1,6 @@
-import './Post.css';
+import './PostFull.css';
 
-const Post = ({ post }) => {
+const PostFull = ({ post }) => {
   return (
     <li>
       <article className="post">
@@ -20,15 +20,25 @@ const Post = ({ post }) => {
           </div>
         </div>
         <div className="post-author">
-          <div className="post-author__name-wrapper">
-            <span className="post-author__name">John Doe</span>
-            <span className="post-author__date">March 5, 2020</span>
+          <div className="post-author__author-information">
+            <div className="post-author__name-wrapper">
+              <span className="post-author__name">John Doe</span>
+              <span className="post-author__date">March 5, 2020</span>
+            </div>
+            <img src="user.png" alt="user" className="post-author__image"/>
           </div>
-          <img src="user.png" alt="user" className="post-author__image"/>
+          <div className="post-author__control-buttons">
+            <button className="button button--delete">
+              Delete
+            </button>
+            <button className="button button--edit">
+              Edit
+            </button>
+          </div>
         </div>
       </article>
     </li>
   )
 };
 
-export default Post;
+export default PostFull;

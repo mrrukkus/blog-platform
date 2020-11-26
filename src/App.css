@@ -3,6 +3,10 @@
   background-color: #EBEEF3;
 }
 
+li {
+  list-style: none;
+}
+
 .app-header {
   width: 100%;
   background-color: white;
