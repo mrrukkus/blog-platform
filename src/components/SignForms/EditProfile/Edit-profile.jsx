@@ -1,4 +1,4 @@
-import '../Sign-in/Sign-in.css';
+import '../SignForms/SignIn/Sign-in.css';
 
 const EditProfile = () => {
   return (

@@ -32,7 +32,7 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 212px;
+  width: 222px;
 }
 
 .auth-buttons__button {
