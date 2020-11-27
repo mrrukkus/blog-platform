@@ -134,3 +134,82 @@
   padding: 6px 23px 5px 19px;
   color: #52C41A;
 }
+
+.button.button--delete {
+  position: relative;
+}
+
+.acception {
+  width: 240px;
+  padding: 12px 16px 12px 40px;
+  position: absolute;
+  background: #FFFFFF;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #000000;
+  font-family: "Roboto";
+  filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.15));
+  left: calc(100% + 7px);
+  top: -1px;
+}
+
+.acception::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 8px solid #ffffff;
+  border-right: 8px solid transparent;
+  left: -4px;
+  transform: rotate(-45deg);
+}
+
+.acception span {
+  display: block;
+  margin-bottom: 13px;
+  position: relative;
+}
+
+.acception span::before {
+  content: "!";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #faad14;
+  left: -24px;
+  color: white;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 3px;
+}
+
+.acception__buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.acception__button {
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.acception__button--cancel {
+  border: 1px solid #d9d9d9;
+}
+
+.acception__button--accept {
+  border: 1px solid #1890FF;
+  background-color: #1890ff;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.acception__buttons .acception__button--cancel {
+  margin-right: 8px;
+}

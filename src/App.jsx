@@ -4,8 +4,8 @@ import './App.css';
 // import SignIn from './components/Sign-in/Sign-in.jsx';
 // import EditProfile from './components/Edit-profile/Edit-profile.jsx';
 // import CreateNewProfile from './components/SignForms/CreateNewAccount/Create-new-profile.jsx';
-// import PostFull from './components/PostFull/PostFull.jsx';
-import CreateNewArticle from './components/CreateNewArticle/CreateNewArticle.jsx';
+import PostFull from './components/PostFull/PostFull.jsx';
+// import CreateNewArticle from './components/CreateNewArticle/CreateNewArticle.jsx';
 
 function App() {
   return (
@@ -26,8 +26,8 @@ function App() {
           {/* <SignIn/> */}
           {/* <EditProfile/> */}
           {/* <CreateNewProfile/> */}
-          {/* <PostFull/> */}
-          <CreateNewArticle />
+          <PostFull/>
+          {/* <CreateNewArticle /> */}
         </div>
       </main>
     </>

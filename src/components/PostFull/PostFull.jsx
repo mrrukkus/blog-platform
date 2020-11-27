@@ -30,9 +30,16 @@ const PostFull = ({ post }) => {
           <img src="user.png" alt="user" className="post-author__image"/>
         </div>
         <div className="post-author__control-buttons">
-          <button className="button button--delete">
+          <div className="button button--delete">
             Delete
-          </button>
+            <div className="acception">
+              <span>Are you sure to delete this article?</span>
+              <div className="acception__buttons">
+                <button className="acception__button acception__button--cancel">No</button>
+                <button className="acception__button acception__button--accept">Yes</button>
+              </div>
+            </div>
+          </div>
           <button className="button button--edit">
             Edit
           </button>
