@@ -1,56 +1,61 @@
 import {extend} from "../../utils.js";
 
 const initialState = {
+  articlesCountToShow: 5,
   contacts: [],
 };
 
 const ActionType = {
-  LOAD_CONTACTS: `LOAD_CONTACTS`,
-  LOAD_EMPTY_CONTACT: `LOAD_EMPTY_CONTACT`,
+  GET_ARTICLES_COUNT: `GET_ARTICLES_COUNT`,
+  LOAD_ARTICLES: `LOAD_ARTICLES`,
 };
 
 const ActionCreator = {
-  loadContacts: (contacts) => {
+  getArticlesCount: (count) => {
     return {
-      type: ActionType.LOAD_CONTACTS,
-      payload: contacts
-    };
+      type: ActionType.GET_ARTICLES_COUNT,
+      payload: count
+    }
   },
-  loadEmptyContact: (contact) => {
+  loadArticles: (data) => {
     return {
-      type: ActionType.LOAD_EMPTY_CONTACT,
-      payload: contact
-    };
+      type: ActionType.LOAD_ARTICLES,
+      payload: data
+    }
   },
 };
 
 const Operation = {
-  loadContacts: () => (dispatch, getState, api) => {
-    return api.get(`/contacts`)
+  getArticlesCount: () => (dispatch, getState, api) => {
+    return api.get(`/articles`)
       .then((response) => {
         dispatch(ActionCreator.loadContacts(response.data));
       });
   },
-  loadEmptyContact: () => (dispatch, getState, api) => {
-    return api.get(`/empty-contact`)
+  loadArticles: (currentPage) => (dispatch, getState, api) => {
+    const { articlesCountToShow } = getState();
+    const articlesCountToOffset = (currentPage - 1) * articlesCountToShow;
+
+    return api.get(`/articles?offset=${articlesCountToOffset}`)
       .then((response) => {
-        dispatch(ActionCreator.loadEmptyContact(response.data));
+        dispatch(ActionCreator.loadContacts(response.data));
       });
   },
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.LOAD_CONTACTS:
+    case ActionType.GET_ARTICLES_COUNT:
       return extend(state, {
-        contacts: action.payload
+        articlesCount: action.payload
       });
-    case ActionType.LOAD_EMPTY_CONTACT:
+    case ActionType.LOAD_ARTICLES:
       return extend(state, {
-        emptyContact: action.payload
+        articles: action.payload
       });
+    default:
+      return state;
   }
-  return state;
 };
 
 export {reducer, ActionType, ActionCreator, Operation};

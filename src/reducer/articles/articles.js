@@ -1,72 +1,81 @@
 import {extend} from "../../utils.js";
 import {Operation as DataOperation} from "../data/data";
 
-console.log(`ы`);
-
 const initialState = {
-  contactToEdit: -1,
-  contactsSearchValue: "",
+  currentPageNumber: 1,
+  articleToEdit: -1,
 };
 
 const ActionType = {
   SET_СONTACT_EDIT: `SET_EDIT_CONTACT`,
-  SET_CONTACT_SEARCH_VALUE: `SET_CONTACT_SEARCH_VALUE`
+  SET_CURRENT_PAGE_NUMBER: `SET_CONTACT_SEARCH_VALUE`
 };
 
 const ActionCreator = {
-  setEditContact: (contactId) => ({
+  setEditArticle: (articleId) => ({
     type: ActionType.SET_СONTACT_EDIT,
-    payload: contactId,
+    payload: articleId,
   }),
-  setContactSearchValue: (searchValue) => ({
-    type: ActionType.SET_CONTACT_SEARCH_VALUE,
-    payload: searchValue,
-  }),
+  setCurrentPage: (pageNumber) => ({
+    type: ActionType.SET_CURRENT_PAGE_NUMBER,
+    payload: pageNumber,
+  })
 };
 
 const Operation = {
-  putEditedContact: (contact) => (dispatch, getState, api) => {
-    return api.put(`/contacts/${contact.id}`, contact)
+  addNewArticle: (article) => (dispatch, getState, api) => {
+    return api.post(`/articles`, {
+      "article": { article }
+    })
       .then(() => {
-        dispatch(DataOperation.loadContacts())
-        alert(`Контакт успешно сохранен`);
-      }).catch((err) => {
-        alert(`Возникла ошибка при изменении контакта`, err);
-      });
-  },
-  addNewContact: (contact) => (dispatch, getState, api) => {
-    return api.post(`/contacts/`, contact)
-      .then(() => {
-        dispatch(DataOperation.loadContacts());
+        const { currentPageNumber } = getState();
+
+        dispatch(DataOperation.loadArticles(currentPageNumber));
         alert(`Контакт успешно создан`);
       })
       .catch((err) => {
         alert(`Возникла ошибка при отправке`, err);
       });
   },
-  deleteContact: (contact) => (dispatch, getState, api) => {
-    return api.delete(`/contacts/${contact.id}`)
+  deleteArticle: (article) => (dispatch, getState, api) => {
+    return api.delete(`/articles/${article.slug}`)
       .then((result) => {
-        dispatch(DataOperation.loadContacts());
+        const { currentPageNumber } = getState();
+
+        dispatch(DataOperation.loadContacts(currentPageNumber));
         alert(`Контакт успешно удален`, result);
       }).catch((err) => {
         alert(`Возникла ошибка при удалении контакта`, err);
       });
-  }
+  },
+  putEditedArticle: (article) => (dispatch, getState, api) => {
+    return api.put(`/articles/${article.slug}`, {
+      "article": { article }
+    })
+      .then(() => {
+        const { currentPageNumber } = getState();
+
+        dispatch(DataOperation.loadContacts(currentPageNumber))
+        alert(`Контакт успешно сохранен`);
+      }).catch((err) => {
+        alert(`Возникла ошибка при изменении контакта`, err);
+      });
+  },
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.SET_СONTACT_EDIT:
       return extend(state, {
-        contactToEdit: action.payload
+        articleToEdit: action.payload
       });
-    case ActionType.SET_CONTACT_SEARCH_VALUE:
+    case ActionType.SET_CURRENT_PAGE_NUMBER:
       return extend(state, {
-        contactsSearchValue: action.payload
+        currentPageNumber: action.payload
       });
+    default:
+      return state;
   }
-  return state;
 };
 
 export {reducer, ActionType, ActionCreator, Operation};

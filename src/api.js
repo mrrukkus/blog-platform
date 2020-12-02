@@ -6,7 +6,7 @@ const Error = {
 
 const createAPI = (onUnauthorized) => {
   const api = axios.create({
-    baseURL: `http://localhost:3000/`,
+    baseURL: `https://conduit.productionready.io/api/`,
     timeout: 5000,
     withCredentials: true,
   });
