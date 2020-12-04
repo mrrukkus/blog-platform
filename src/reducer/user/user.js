@@ -1,4 +1,7 @@
-import {Operation as DataOperation} from '../data/data';
+import {extend} from '../../utils.js';
+// import {Operation as DataOperation} from '../data/data';
+
+console.log(`s`);
 
 const AuthorizationStatus = {
   AUTH: `AUTH`,
@@ -23,41 +26,59 @@ const ActionCreator = {
 };
 
 const Operation = {
-  checkAuthorizationStatus: () => (dispatch, getState, api) => {
-    return api.get(`/login`)
+  checkAuthorizationStatus: () => (dispatch, getState, api) => {//кажется готово
+    return api.get(`/user`)
       .then(() => {
-        // dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
+        dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
       })
       .catch((err) => {
         throw err;
       });
   },
-  login: (authData) => (dispatch, getState, api) => {
-    return api.post(`/login`, {
-      "email": authData.login,
-      "password": authData.password,
+  login: (authData) => (dispatch, getState, api) => { //дописать обработчики
+    return api.post(`/users/login`, {
+      "user": {
+        "email": authData.email,
+        "password": authData.password
+      }
     })
       .then((response) => {
         console.log(response);
-        dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
-        dispatch(DataOperation.loadContacts());
-        dispatch(DataOperation.loadEmptyContact());
+        // dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
+        // dispatch(DataOperation.loadContacts());
+        // dispatch(DataOperation.loadEmptyContact());
       })
       .catch((err) => {
         console.log(err);
         alert(`Возникла ошибка при входе. Ошибка: `, err);
       });
   },
+  register: (registrationData) => (dispatch, getState, api) => {//только исправить обработчики
+    return api.post(`/users`, {
+      "user": {
+        "username": registrationData.userName,
+        "email": registrationData.email,
+        "password": registrationData.password
+      }
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.REQUIRED_AUTHORIZATION:
-      return Object.assign({}, state, {
+      return extend(state, {
         authorizationStatus: action.status
       });
+    default:
+      return state;
   }
-  return state;
 };
 
 export {reducer, ActionType, ActionCreator, Operation, AuthorizationStatus};

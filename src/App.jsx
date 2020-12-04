@@ -1,10 +1,10 @@
 import './App.css';
 // import Post from "./components/Post/Post.jsx";
 // import Pagination from './components/Pagination/Pagination.jsx';
-// import SignIn from './components/Sign-in/Sign-in.jsx';
+import SignIn from './components/SignForms/SignIn/Sign-in.jsx';
 // import EditProfile from './components/Edit-profile/Edit-profile.jsx';
 // import CreateNewProfile from './components/SignForms/CreateNewAccount/Create-new-profile.jsx';
-import PostFull from './components/PostFull/PostFull.jsx';
+// import PostFull from './components/PostFull/PostFull.jsx';
 // import CreateNewArticle from './components/CreateNewArticle/CreateNewArticle.jsx';
 
 function App() {
@@ -23,10 +23,10 @@ function App() {
         <div className="app-main-wrapper">
           {/* <Post/> */}
           {/* <Pagination /> */}
-          {/* <SignIn/> */}
+          <SignIn/>
           {/* <EditProfile/> */}
           {/* <CreateNewProfile/> */}
-          <PostFull/>
+          {/* <PostFull/> */}
           {/* <CreateNewArticle /> */}
         </div>
       </main>

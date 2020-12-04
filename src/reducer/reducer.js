@@ -5,7 +5,7 @@ import {reducer as user} from "./user/user.js";
 import NameSpace from "./name-space.js";
 
 export default combineReducers({
-  [NameSpace.CONTACTS]: articles,
+  [NameSpace.ARTICLES]: articles,
   [NameSpace.DATA]: data,
   [NameSpace.USER]: user,
 });
