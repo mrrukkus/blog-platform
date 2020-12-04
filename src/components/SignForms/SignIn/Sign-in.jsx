@@ -7,17 +7,16 @@ const SignIn = () => {
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   const dispatch = useDispatch();
-  const authData = {
-    email: emailValue,
-    password: passwordValue
-  }
 
   const changeEmailHandler = (evt) => setEmailValue(evt.target.value);
   const changePasswordHandler = (evt) => setPasswordValue(evt.target.value);
 
   const formSubmitHandler = (evt) => {
     evt.preventDefault();
-    dispatch(Operation.login(authData))
+    dispatch(Operation.login({
+      email: emailValue,
+      password: passwordValue
+    }))
   };
 
   return (
