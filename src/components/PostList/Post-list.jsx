@@ -1,4 +1,8 @@
+import Header from '../Header/Header.jsx';
+import Main from '../Main/Main.jsx';
 import Post from '../Post/Post.jsx';
+import Pagination from '../Pagination/Pagination.jsx';
+
 import './Post-List.css';
 
 const getPosts = (posts) => {
@@ -7,9 +11,15 @@ const getPosts = (posts) => {
 
 const PostList = ({ posts }) => {
   return (
-    <ul className="posts">
-      {getPosts(posts)}
-    </ul>
+    <>
+      <Header/>
+      <Main>
+        <ul className="posts">
+          {getPosts(posts)}
+        </ul>
+      </Main>
+      <Pagination/>
+    </>
   )
 }
 
