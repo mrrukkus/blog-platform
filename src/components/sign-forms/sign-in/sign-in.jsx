@@ -1,9 +1,11 @@
-import '../Sign-in.css';
-import Header from '../../Header/Header.jsx';
-import Main from '../../Main/Main.jsx';
-import { Operation } from '../../../reducer/user/user.js';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+
+import '../sign-in.css';
+
+import Header from '../../header/header.jsx';
+import Main from '../../main/main.jsx';
+import { Operation } from '../../../reducer/user/user.js';
 
 const SignIn = () => {
   const [emailValue, setEmailValue] = useState('');

@@ -1,7 +1,7 @@
-import '../Sign-in/Sign-in.css';
+import '../sign-in.css';
 
-import Header from '../../Header/Header.jsx';
-import Main from '../../Main/Main.jsx';
+import Header from '../../header/header.jsx';
+import Main from '../../main/main.jsx';
 
 const CreateNewAccount = () => {
   return (

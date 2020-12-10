@@ -19,7 +19,7 @@ const ActionCreator = {
   setCurrentPage: (pageNumber) => ({
     type: ActionType.SET_CURRENT_PAGE_NUMBER,
     payload: pageNumber,
-  })
+  }),
 };
 
 const Operation = {

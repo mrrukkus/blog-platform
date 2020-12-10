@@ -1,6 +1,6 @@
-import './PostFull.css';
-import Header from '../Header/Header.jsx';
-import Main from '../Main/Main.jsx';
+import './post-full.css';
+import Header from '../header/header.jsx';
+import Main from '../main/main.jsx';
 
 const PostFull = ({ post }) => {
   return (

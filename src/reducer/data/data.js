@@ -1,19 +1,21 @@
 import {extend} from "../../utils.js";
 
 const initialState = {
-  articlesCountToShow: 5,
+  articlesCountToShow: 20,
   contacts: [],
+  isLoading: true
 };
 
 const ActionType = {
-  GET_ARTICLES_COUNT: `GET_ARTICLES_COUNT`,
+  SET_PAGES_COUNT: `SET_PAGES_COUNT`,
   LOAD_ARTICLES: `LOAD_ARTICLES`,
+  SET_LOADING_STATUS: `SET_LOADING_STATUS`
 };
 
 const ActionCreator = {
-  getArticlesCount: (count) => {
+  setPagesCount: (count) => {
     return {
-      type: ActionType.GET_ARTICLES_COUNT,
+      type: ActionType.SET_PAGES_COUNT,
       payload: count
     }
   },
@@ -23,13 +25,23 @@ const ActionCreator = {
       payload: data
     }
   },
+  setLoadingStatus: (status) => {
+    return {
+      type: ActionType.SET_LOADING_STATUS,
+      payload: status
+    }
+  },
 };
 
 const Operation = {
-  getArticlesCount: () => (dispatch, getState, api) => {
+  getPagesCount: () => (dispatch, getState, api) => {
     return api.get(`/articles`)
       .then((response) => {
-        dispatch(ActionCreator.loadContacts(response.data));
+        const data = response.data;
+        const {articlesCountToShow} = getState().DATA;
+
+        dispatch(ActionCreator.setPagesCount(data.articlesCount / articlesCountToShow));
+        dispatch(ActionCreator.setLoadingStatus(false));
       });
   },
   loadArticles: (currentPage) => (dispatch, getState, api) => {
@@ -45,13 +57,17 @@ const Operation = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.GET_ARTICLES_COUNT:
+    case ActionType.SET_PAGES_COUNT:
       return extend(state, {
-        articlesCount: action.payload
+        pagesCount: action.payload
       });
     case ActionType.LOAD_ARTICLES:
       return extend(state, {
         articles: action.payload
+      });
+    case ActionType.SET_LOADING_STATUS:
+      return extend(state, {
+        isLoading: action.payload
       });
     default:
       return state;

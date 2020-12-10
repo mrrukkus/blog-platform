@@ -1,36 +1,37 @@
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
 import './App.css';
-// import Post from "./components/Post/Post.jsx";
-// import Pagination from './components/Pagination/Pagination.jsx';
-import SignIn from './components/SignForms/SignIn/Sign-in.jsx';
-// import EditProfile from './components/Edit-profile/Edit-profile.jsx';
-// import CreateNewProfile from './components/SignForms/CreateNewAccount/Create-new-profile.jsx';
-// import PostFull from './components/PostFull/PostFull.jsx';
-// import CreateNewArticle from './components/CreateNewArticle/CreateNewArticle.jsx';
+
+import SignIn from './components/sign-forms/sign-in/sign-in.jsx';
+import EditProfile from './components/sign-forms/edit-profile/edit-profile.jsx';
+import SignUp from './components/sign-forms/sign-up/sign-up.jsx';
+import PostFull from './components/post-full/post-full.jsx';
+import CreateNewArticle from './components/create-new-article/create-new-article.jsx';
+import PostList from './components/post-list/post-list.jsx';
+import { Operation } from './reducer/data/data';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(Operation.getPagesCount());
+  });
+
   return (
-    <>
-      <header className="app-header">
-        <div className="header-wrapper">
-          <h1 className="app-header__header">Realworld blog</h1>
-          <div className="auth-buttons">
-            <button className="auth-buttons__button">Sign In</button>
-            <button className="auth-buttons__button auth-buttons__button--auth">Sign Up</button>
-          </div>
-        </div>
-      </header>
-      <main className="app-main">
-        <div className="app-main-wrapper">
-          {/* <Post/> */}
-          {/* <Pagination /> */}
-          <SignIn/>
-          {/* <EditProfile/> */}
-          {/* <CreateNewProfile/> */}
-          {/* <PostFull/> */}
-          {/* <CreateNewArticle /> */}
-        </div>
-      </main>
-    </>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path={["/", "articles"]} component={PostList}/>
+        <Route exact path="/articles/:slug" component={PostFull}/>
+        <Route exact path="/sign-in" component={SignIn}/>
+        <Route exact path="/sign-up" component={SignUp}/>
+        <Route exact path="/edit" component={EditProfile}/>
+        <Route exact path="/new-article" component={CreateNewArticle}/>
+      </Switch>
+    </BrowserRouter>
+    // <>
+    // </>
   );
 };
 

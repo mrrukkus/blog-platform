@@ -1,6 +1,6 @@
-import './CreateNewArticle.css';
-import Header from '../Header/Header.jsx';
-import Main from '../Main/Main.jsx';
+import './create-new-article.css';
+import Header from '../header/header.jsx';
+import Main from '../main/main.jsx';
 
 const CreateNewArticle = () => {
   return (

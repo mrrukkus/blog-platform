@@ -1,6 +1,5 @@
 .pagination {
   display: flex;
-  width: 200px;
   margin: 20px auto;
 }
 
@@ -14,7 +13,9 @@
   border: none;
   background-color: transparent;
   position: relative;
+  margin: 0;
 }
+
 
 .pagination__prev::before,
 .pagination__next::before {

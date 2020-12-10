@@ -1,7 +1,7 @@
-import '../SignForms/SignIn/Sign-in.css';
-import Header from '../../Header/Header.jsx';
-import Main from '../../Main/Main.jsx';
+import '../sign-in.css';
 
+import Header from '../../header/header.jsx';
+import Main from '../../main/main.jsx';
 
 const EditProfile = () => {
   return (

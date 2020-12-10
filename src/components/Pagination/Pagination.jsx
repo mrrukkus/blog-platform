@@ -1,15 +1,17 @@
-import './Pagination.css';
+import './pagination.css';
 
-const Pagination = () => {
+const Pagination = ({ pagesCount, currentPage, onPageNumberClick }) => {
+  const paginationLinks = [];
+
+  for (let i = 1; i <= pagesCount; i++) {
+    paginationLinks.push(<a href={`#${i}`} className={`pagination__number ${currentPage === i ? `pagination__number--active` : null}`} onClick={onPageNumberClick} key={i}>{i}</a>)
+  }
+
   return (
     <div className="pagination">
       <button className="pagination__arrow pagination__prev"></button>
       <div className="pagination__numbers">
-        <a href="#1" className="pagination__number pagination__number--active">1</a>
-        <a href="#2" className="pagination__number ">2</a>
-        <a href="#3" className="pagination__number ">3</a>
-        <a href="#4" className="pagination__number ">4</a>
-        <a href="#5" className="pagination__number ">5</a>
+        {paginationLinks}
       </div>
       <button className="pagination__arrow pagination__next"></button>
     </div>
