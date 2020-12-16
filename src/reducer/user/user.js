@@ -1,15 +1,9 @@
 import {extend} from '../../utils.js';
 // import {Operation as DataOperation} from '../data/data';
 
-console.log(`s`);
-
-const AuthorizationStatus = {
-  AUTH: `AUTH`,
-  NO_AUTH: `NO_AUTH`
-};
 
 const initialState = {
-  authorizationStatus: AuthorizationStatus.NO_AUTH,
+  authorizationStatus: false,
 };
 
 const ActionType = {
@@ -29,7 +23,7 @@ const Operation = {
   checkAuthorizationStatus: () => (dispatch, getState, api) => {//кажется готово
     return api.get(`/user`)
       .then(() => {
-        dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
+        dispatch(ActionCreator.requireAuthorization(true));
       })
       .catch((err) => {
         throw err;
@@ -42,9 +36,13 @@ const Operation = {
         "password": authData.password
       }
     })
-      .then((response) => {
-        console.log(response);
-        // dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
+      .then(({ data }) => {
+        console.log(data);
+        dispatch(ActionCreator.requireAuthorization(true));
+        localStorage.setItem(
+          'user', 
+          JSON.stringify({ email: data.user.email, password: authData.password, token: data.user.token }).toString()
+        )
         // dispatch(DataOperation.loadContacts());
         // dispatch(DataOperation.loadEmptyContact());
       })
@@ -81,4 +79,4 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export {reducer, ActionType, ActionCreator, Operation, AuthorizationStatus};
+export {reducer, ActionType, ActionCreator, Operation};
