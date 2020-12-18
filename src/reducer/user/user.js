@@ -1,29 +1,32 @@
 import {extend} from '../../utils.js';
-// import {Operation as DataOperation} from '../data/data';
 
 
 const initialState = {
   authorizationStatus: false,
+  currentUser: null
 };
 
 const ActionType = {
   REQUIRED_AUTHORIZATION: `REQUIRED_AUTHORIZATION`,
+  SET_CURRENT_USER: `SET_CURRENT_USER`,
 };
 
 const ActionCreator = {
-  requireAuthorization: (stats) => {
+  requireAuthorization: (status, user) => {
     return {
       type: ActionType.REQUIRED_AUTHORIZATION,
-      status: stats
+      status,
+      user
     };
   },
 };
 
 const Operation = {
-  checkAuthorizationStatus: () => (dispatch, getState, api) => {//кажется готово
+  checkAuthorizationStatus: () => async (dispatch, getState, api) => {//кажется готово
     return api.get(`/user`)
-      .then(() => {
-        dispatch(ActionCreator.requireAuthorization(true));
+      .then((response) => {
+        console.log(api.defaults.headers, response);
+        dispatch(ActionCreator.requireAuthorization(true, response.data.user));
       })
       .catch((err) => {
         throw err;
@@ -38,13 +41,12 @@ const Operation = {
     })
       .then(({ data }) => {
         console.log(data);
-        dispatch(ActionCreator.requireAuthorization(true));
+        api.defaults.headers.common['Authorization'] = `Token ${data.user.token}`;
+        dispatch(ActionCreator.requireAuthorization(true, data.user));
         localStorage.setItem(
-          'user', 
+          'user',
           JSON.stringify({ email: data.user.email, password: authData.password, token: data.user.token }).toString()
         )
-        // dispatch(DataOperation.loadContacts());
-        // dispatch(DataOperation.loadEmptyContact());
       })
       .catch((err) => {
         console.log(err);
@@ -72,7 +74,12 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.REQUIRED_AUTHORIZATION:
       return extend(state, {
-        authorizationStatus: action.status
+        authorizationStatus: action.status,
+        currentUser: action.user
+      });
+    case ActionType.SET_CURRENT_USER:
+      return extend(state, {
+        currentUser: action.user
       });
     default:
       return state;

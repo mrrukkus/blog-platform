@@ -61,7 +61,6 @@ const Operation = {
 
     return api.get(`/articles?offset=${articlesCountToOffset}`)
       .then((response) => {
-        console.log('a');
         dispatch(ActionCreator.loadArticles(response.data.articles));
         dispatch(ActionCreator.setLoadingStatus(false));
       });

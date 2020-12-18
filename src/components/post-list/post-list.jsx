@@ -22,16 +22,19 @@ const PostList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(Operation.loadArticles(currentPage));
-  }, [currentPage]);
+    dispatch(Operation.getPagesCount());
+  }, [pagesCount, dispatch]);
 
-  console.log(loadedArticles);
+  useEffect(() => {
+    dispatch(Operation.loadArticles(currentPage));
+  }, [currentPage, dispatch]);
+
+  console.log('list rendered');
 
   const onPageNumberClick = (e) => {
     setCurrentPage(+e.target.innerText);
-  }
+  };
 
-  console.log(pagesCount);
   return (
     <>
       <Header/>

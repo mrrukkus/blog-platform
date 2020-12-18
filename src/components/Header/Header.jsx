@@ -1,5 +1,7 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+
+import {ActionCreator} from '../../reducer/user/user';
 
 const noAuthMarkup =
   <div className="auth-buttons">
@@ -7,20 +9,27 @@ const noAuthMarkup =
     <Link to={`/sign-up`} className="auth-buttons__button auth-buttons__button--auth">Sign Up</Link>
   </div>;
 
-const AuthMarkup =
+const userMarkup = (user, logout) =>
   <div className="user-buttons">
     <Link to="/new-article" className="user-buttons__create-article">Create article</Link>
     <Link to="/profile">
-      John Doe
-      <img src="" alt="user-avatar"/>
+      {user.username}
+      <img src={`${user.image}`} alt="user-avatar"/>
     </Link>
-    <button className="user-buttons__logout">Log Out</button>
+    <button className="user-buttons__logout" onClick={logout}>Log Out</button>
   </div>
 
 
 const Header = () => {
-  const authStatus = useSelector((state) => state.USER.authorizationStatus);
-  const userInterface = authStatus ? AuthMarkup : noAuthMarkup;
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.USER.currentUser);
+
+  const logout = () => {
+    dispatch(ActionCreator.requireAuthorization(false, null));
+    localStorage.removeItem('user');
+  };
+
+  const userInterface = currentUser ? userMarkup(currentUser, logout) : noAuthMarkup;
 
   return (
     <header className="app-header">

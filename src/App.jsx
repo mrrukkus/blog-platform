@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './App.css';
 
@@ -10,14 +10,14 @@ import SignUp from './components/sign-forms/sign-up/sign-up.jsx';
 import PostFull from './components/post-full/post-full.jsx';
 import CreateNewArticle from './components/create-new-article/create-new-article.jsx';
 import PostList from './components/post-list/post-list.jsx';
-import { Operation } from './reducer/data/data';
+import { Operation as DataOperation } from './reducer/data/data';
+import { Operation as UserOperation } from './reducer/user/user';
+
 
 function App() {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(Operation.getPagesCount());
-  });
+  console.log('app rendered');
+  dispatch(UserOperation.checkAuthorizationStatus());
 
   return (
     <BrowserRouter>
@@ -26,7 +26,7 @@ function App() {
         <Route exact path="/articles/:slug" component={PostFull}/>
         <Route exact path="/sign-in" component={SignIn}/>
         <Route exact path="/sign-up" component={SignUp}/>
-        <Route exact path="/edit" component={EditProfile}/>
+        <Route exact path="/profile" component={EditProfile}/>
         <Route exact path="/new-article" component={CreateNewArticle}/>
       </Switch>
     </BrowserRouter>
