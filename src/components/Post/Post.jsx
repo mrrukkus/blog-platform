@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom';
 import './post.css';
 
 const Post = ({ post }) => {
-  // console.log(post);
+  const tagsList = () => {
+    return post.tagList.map((tag, i) => <span className="post__tag" key={i}>{tag}</span>);
+  }
   return (
     <li>
       <article className="post">
@@ -15,7 +17,7 @@ const Post = ({ post }) => {
             <span className="post__likes-count">{post.favoritesCount}</span>
           </div>
           <div className="post__tags">
-            <span className="post__tag">Tag1</span>
+            {tagsList()}
           </div>
           <div className="post__description">
             {post.description}
