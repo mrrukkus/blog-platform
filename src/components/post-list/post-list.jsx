@@ -7,7 +7,7 @@ import Header from '../header/header.jsx';
 import Main from '../main/main.jsx';
 import Post from '../post/post.jsx';
 import Pagination from '../pagination/pagination.jsx';
-import { ActionCreator, Operation } from '../../reducer/data/data';
+import { Operation } from '../../reducer/data/data';
 
 
 const getPosts = (posts) => {

@@ -70,6 +70,16 @@ button {
   flex-direction: column;
 }
 
+.user-buttons,
+.user-buttons__profile {
+  display: flex;
+  align-items: center;
+}
+
+.user-buttons__profile img {
+  margin-left: 13px;
+}
+
 .user-buttons a {
   text-decoration: none;
   margin-right: 26px;
@@ -85,5 +95,6 @@ button {
   padding: 10px 18px;
   border: 1px solid rgba(0, 0, 0, 0.75);
   border-radius: 5px;
+  margin: 0;
 }
 

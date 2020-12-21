@@ -12,13 +12,18 @@ const ActionType = {
 };
 
 const ActionCreator = {
-  requireAuthorization: (status, user) => {
+  requireAuthorization: (status) => {
     return {
       type: ActionType.REQUIRED_AUTHORIZATION,
       status,
-      user
     };
   },
+  setCurrentUser: (user) => {
+    return {
+      type: ActionType.SET_CURRENT_USER,
+      user
+    }
+  }
 };
 
 const Operation = {
@@ -26,7 +31,8 @@ const Operation = {
     return api.get(`/user`)
       .then((response) => {
         console.log(api.defaults.headers, response);
-        dispatch(ActionCreator.requireAuthorization(true, response.data.user));
+        dispatch(ActionCreator.setCurrentUser(response.data.user));
+        dispatch(ActionCreator.requireAuthorization(true));
       })
       .catch((err) => {
         throw err;
@@ -42,7 +48,8 @@ const Operation = {
       .then(({ data }) => {
         console.log(data);
         api.defaults.headers.common['Authorization'] = `Token ${data.user.token}`;
-        dispatch(ActionCreator.requireAuthorization(true, data.user));
+        dispatch(ActionCreator.setCurrentUser(data.user));
+        dispatch(ActionCreator.requireAuthorization(true));
         localStorage.setItem(
           'user',
           JSON.stringify({ email: data.user.email, password: authData.password, token: data.user.token }).toString()
@@ -67,6 +74,28 @@ const Operation = {
       .catch((err) => {
         console.log(err);
       })
+  },
+  editProfile: (newData) => (dispatch, getState, api) => {
+    console.log(newData, 'new data');
+    return api.put(`/user`, {
+      "user": {
+        "username": newData.username,
+        "email": newData.email,
+        "password": newData.password,
+        "image": newData.image
+      }
+    }).then(({data}) => {
+      // console.log(response);
+      console.log(data.user);
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ email: data.user.email, password: newData.password, token: data.user.token }).toString()
+      )
+      dispatch(ActionCreator.setCurrentUser(data.user));
+    }).catch((err) => {
+      alert('Введенные логин и/или почта заняты!');
+      throw err;
+    })
   }
 };
 
@@ -75,7 +104,6 @@ const reducer = (state = initialState, action) => {
     case ActionType.REQUIRED_AUTHORIZATION:
       return extend(state, {
         authorizationStatus: action.status,
-        currentUser: action.user
       });
     case ActionType.SET_CURRENT_USER:
       return extend(state, {

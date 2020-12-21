@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import './App.css';
 
@@ -10,7 +9,6 @@ import SignUp from './components/sign-forms/sign-up/sign-up.jsx';
 import PostFull from './components/post-full/post-full.jsx';
 import CreateNewArticle from './components/create-new-article/create-new-article.jsx';
 import PostList from './components/post-list/post-list.jsx';
-import { Operation as DataOperation } from './reducer/data/data';
 import { Operation as UserOperation } from './reducer/user/user';
 
 

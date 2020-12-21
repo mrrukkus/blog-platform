@@ -12,9 +12,9 @@ const noAuthMarkup =
 const userMarkup = (user, logout) =>
   <div className="user-buttons">
     <Link to="/new-article" className="user-buttons__create-article">Create article</Link>
-    <Link to="/profile">
+    <Link to="/profile" className="user-buttons__profile">
       {user.username}
-      <img src={`${user.image}`} alt="user-avatar"/>
+      <img src={`${user.image}`} alt="user-avatar" width="46" height="46"/>
     </Link>
     <button className="user-buttons__logout" onClick={logout}>Log Out</button>
   </div>
@@ -23,6 +23,7 @@ const userMarkup = (user, logout) =>
 const Header = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.USER.currentUser);
+  console.log(currentUser);
 
   const logout = () => {
     dispatch(ActionCreator.requireAuthorization(false, null));

@@ -25,12 +25,12 @@ const ActionCreator = {
 const Operation = {
   addNewArticle: (article) => (dispatch, getState, api) => {
     return api.post(`/articles`, {
-      "article": { article }
+      "article": article
     })
       .then(() => {
-        const { currentPageNumber } = getState();
+        // const { currentPageNumber } = getState();
 
-        dispatch(DataOperation.loadArticles(currentPageNumber));
+        // dispatch(DataOperation.loadArticles(currentPageNumber));
         alert(`Контакт успешно создан`);
       })
       .catch((err) => {
