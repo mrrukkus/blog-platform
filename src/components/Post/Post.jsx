@@ -1,6 +1,8 @@
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import format from 'date-fns/format';
+
 import {Operation} from '../../reducer/data/data';
 import './post.css';
 
@@ -8,6 +10,8 @@ const Post = ({ post }) => {
   const tagsList = () => {
     return post.tagList.map((tag, i) => <span className="post__tag" key={i}>{tag}</span>);
   };
+
+  const postDate = format(new Date(post.createdAt), 'PP');
 
   const dispatch = useDispatch();
   return (
@@ -33,8 +37,7 @@ const Post = ({ post }) => {
         <div className="post-author">
           <div className="post-author__name-wrapper">
             <span className="post-author__name">{post.author.username}</span>
-            {/* Нужно сделать отрисовку с помощью date-fns */}
-            <span className="post-author__date">March 5, 2020</span>
+            <span className="post-author__date">{postDate}</span>
           </div>
           <img src={`${post.author.image}`} alt="user" className="post-author__image" width="46" height="46"/>
         </div>

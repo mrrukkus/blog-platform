@@ -1,6 +1,7 @@
 import { Operation as DataOperation } from '../../reducer/data/data';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCallback, useEffect, useState } from 'react';
+import marked from 'marked';
 import { Link } from 'react-router-dom';
 
 import Header from '../header/header.jsx';
@@ -12,7 +13,17 @@ import './post-full.css';
 const PostFull = (props) => {
   const dispatch = useDispatch();
   const slug = props.match.params.slug;
+
+  const loadArticleHandler = useCallback(() => {
+    dispatch(DataOperation.loadArticleDetails(slug));
+  }, [slug, dispatch]);
+
+  useEffect(() => {
+    loadArticleHandler();
+  }, [loadArticleHandler]);
+
   const article = useSelector((state) => state.DATA.articleDetails);
+  console.log(article);
 
   const currentUserName = useSelector((state) => {
     return state.USER.currentUser ? state.USER.currentUser.username : '';
@@ -20,21 +31,21 @@ const PostFull = (props) => {
 
   const [deletionAcception, setDeletionAcception] = useState(false);
 
-  const loadArticleHandler = useCallback(() => {
-    dispatch(DataOperation.loadArticleDetails(slug));
-  }, [slug, dispatch]);
 
   const tagsList = () => {
     return article.tagList.map((tag, i) => <span className="post__tag" key={i}>{tag}</span>);
   };
 
-
-  useEffect(() => {
-    loadArticleHandler();
-  }, [loadArticleHandler]);
+  const getBodyMarkup = () => {
+    let rawMarkup = '';
+    if (article) {
+      rawMarkup = marked(article.body);
+      return {__html: rawMarkup};
+    }
+    return {__html: rawMarkup};
+  }
 
   const loadingStatus = useSelector((state) => state.DATA.isLoading);
-
   const acceptionClassname = deletionAcception ? '' : 'acception--hidden';
 
   return (
@@ -57,8 +68,7 @@ const PostFull = (props) => {
             <div className="post__description">
               {article.description}
             </div>
-            <div className="post__full-information">
-              {/* Markdown разметка */}
+            <div className="post__full-information" dangerouslySetInnerHTML={getBodyMarkup()}>
             </div>
           </div>
           <div className="post-author-edit">
