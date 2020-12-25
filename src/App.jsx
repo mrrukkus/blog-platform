@@ -8,13 +8,13 @@ import EditProfile from './components/sign-forms/edit-profile/edit-profile.jsx';
 import SignUp from './components/sign-forms/sign-up/sign-up.jsx';
 import PostFull from './components/post-full/post-full.jsx';
 import CreateNewArticle from './components/create-new-article/create-new-article.jsx';
+import EditArticle from './components/edit-article/edit-article.jsx';
 import PostList from './components/post-list/post-list.jsx';
 import { Operation as UserOperation } from './reducer/user/user';
 
 
 function App() {
   const dispatch = useDispatch();
-  console.log('app rendered');
   dispatch(UserOperation.checkAuthorizationStatus());
 
   return (
@@ -22,6 +22,7 @@ function App() {
       <Switch>
         <Route exact path={["/", "articles"]} component={PostList}/>
         <Route exact path="/articles/:slug" component={PostFull}/>
+        <Route exact path="/articles/:slug/edit" component={EditArticle}/>
         <Route exact path="/sign-in" component={SignIn}/>
         <Route exact path="/sign-up" component={SignUp}/>
         <Route exact path="/profile" component={EditProfile}/>

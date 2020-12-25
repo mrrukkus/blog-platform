@@ -18,13 +18,14 @@
   margin-bottom: 4px;
 }
 
-.post__title-area h2 {
+.post__title-area a {
   font-size: 20px;
   line-height: 28px;
   font-weight: 400;
   color: #1890ff;
   margin: 0;
   margin-right: 12px;
+  text-decoration: none;
 }
 
 .post__title-area svg {

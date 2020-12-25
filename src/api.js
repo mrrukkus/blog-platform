@@ -1,13 +1,5 @@
 import axios from "axios";
 
-const apiPaths = {
-  registration: '/users',
-  auth: '/users/login',
-  reqUser: '/user',
-  getProfile: '/profiles/',
-  getCreateArticles: '/articles',
-}
-
 const Error = {
   UNAUTHORIZED: 401
 };

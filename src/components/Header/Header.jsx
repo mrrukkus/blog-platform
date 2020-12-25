@@ -23,7 +23,6 @@ const userMarkup = (user, logout) =>
 const Header = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.USER.currentUser);
-  console.log(currentUser);
 
   const logout = () => {
     dispatch(ActionCreator.requireAuthorization(false, null));

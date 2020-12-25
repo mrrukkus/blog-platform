@@ -3,17 +3,17 @@ import {Operation as DataOperation} from "../data/data";
 
 const initialState = {
   currentPageNumber: 1,
-  articleToEdit: -1,
+  articleToEdit: null,
 };
 
 const ActionType = {
-  SET_СONTACT_EDIT: `SET_EDIT_CONTACT`,
+  SET_ARTICLE_EDIT: `SET_ARTICLE_EDIT`,
   SET_CURRENT_PAGE_NUMBER: `SET_CONTACT_SEARCH_VALUE`
 };
 
 const ActionCreator = {
   setEditArticle: (articleId) => ({
-    type: ActionType.SET_СONTACT_EDIT,
+    type: ActionType.SET_ARTICLE_EDIT,
     payload: articleId,
   }),
   setCurrentPage: (pageNumber) => ({
@@ -40,32 +40,34 @@ const Operation = {
   deleteArticle: (article) => (dispatch, getState, api) => {
     return api.delete(`/articles/${article.slug}`)
       .then((result) => {
-        const { currentPageNumber } = getState();
+        // const { currentPageNumber } = getState();
 
-        dispatch(DataOperation.loadContacts(currentPageNumber));
+        // dispatch(DataOperation.loadContacts(currentPageNumber));
         alert(`Контакт успешно удален`, result);
       }).catch((err) => {
-        alert(`Возникла ошибка при удалении контакта`, err);
+        alert(`Возникла ошибка при удалении статьи`);
+        throw err;
       });
   },
-  putEditedArticle: (article) => (dispatch, getState, api) => {
-    return api.put(`/articles/${article.slug}`, {
-      "article": { article }
+  putEditedArticle: (article, slug) => (dispatch, getState, api) => {
+    return api.put(`/articles/${slug}`, {
+      "article": article
     })
       .then(() => {
         const { currentPageNumber } = getState();
 
-        dispatch(DataOperation.loadContacts(currentPageNumber))
+        // dispatch(DataOperation.loadContacts(currentPageNumber))
         alert(`Контакт успешно сохранен`);
       }).catch((err) => {
-        alert(`Возникла ошибка при изменении контакта`, err);
+        alert(`Возникла ошибка при изменении статьи`);
+        throw err;
       });
   },
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.SET_СONTACT_EDIT:
+    case ActionType.SET_ARTICLE_EDIT:
       return extend(state, {
         articleToEdit: action.payload
       });

@@ -1,17 +1,18 @@
-import './create-new-article.css';
+import '../create-new-article/create-new-article.css';
 import Header from '../header/header.jsx';
 import Main from '../main/main.jsx';
 import { useCallback, useMemo, useState } from 'react';
 import { Operation } from '../../reducer/articles/articles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-const CreateNewArticle = () => {
+const EditArticle = () => {
+  const { title, body, tagList, description, slug } = useSelector((state) => state.ARTICLES.articleToEdit);
   const dispatch = useDispatch();
-  const [titleValue, setTitleValue] = useState('');
-  const [descriptionValue, setDescriptionValue] = useState('');
-  const [textValue, setTextValue] = useState('');
-  const [tagsList, setTagsList] = useState([]);
-
+  const [titleValue, setTitleValue] = useState(title);
+  const [descriptionValue, setDescriptionValue] = useState(description);
+  const [textValue, setTextValue] = useState(body);
+  const [tagsList, setTagsList] = useState(tagList);
+  console.log('|', titleValue, '|', descriptionValue, '|', textValue, '|', tagsList, '|');
   const [newTagValue, setNewTagValue] = useState('');
 
   const onTagAdd = (evt) => {
@@ -51,16 +52,18 @@ const CreateNewArticle = () => {
   //   });
   // };
 
-  const newArticleSubmit = (evt) => {
+  const editedArticleSubmit = (evt) => {
     evt.preventDefault();
-    const newArticle = {
+    const editedArticle = {
       "title": titleValue,
       "description": descriptionValue,
       "body": textValue,
       "tagList": tagsList
     };
 
-    dispatch(Operation.addNewArticle(newArticle));
+    console.log(editedArticle.title, slug);
+
+    dispatch(Operation.putEditedArticle(editedArticle, slug));
   };
 
 
@@ -68,20 +71,26 @@ const CreateNewArticle = () => {
     <>
       <Header/>
       <Main>
-        <form className="new-article" onSubmit={newArticleSubmit}>
-          <h2>Create new article</h2>
+        <form className="new-article" onSubmit={editedArticleSubmit}>
+          <h2>Edit article</h2>
           <label htmlFor="title">Title</label>
-          <input type="text" id="title" placeholder="Title" onChange={(evt) => {
+          <input type="text" id="title" placeholder="Title"
+          value={titleValue}
+          onChange={(evt) => {
             setTitleValue(evt.target.value);
           }}/>
 
           <label htmlFor="short-description">Short description</label>
-          <input type="text" id="short-description" placeholder="Title" onChange={(evt) => {
+          <input type="text" id="short-description" placeholder="Title"
+          value={descriptionValue}
+          onChange={(evt) => {
             setDescriptionValue(evt.target.value);
           }}/>
 
           <label htmlFor="">Text</label>
-          <textarea name="Text" id="text" cols="30" rows="10" className="new-article__text" placeholder="Text" onChange={(evt) => {
+          <textarea name="Text" id="text" cols="30" rows="10" className="new-article__text" placeholder="Text"
+          value={textValue}
+          onChange={(evt) => {
             setTextValue(evt.target.value);
           }}></textarea>
 
@@ -103,4 +112,4 @@ const CreateNewArticle = () => {
   )
 };
 
-export default CreateNewArticle;
+export default EditArticle;

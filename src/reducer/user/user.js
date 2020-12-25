@@ -30,7 +30,6 @@ const Operation = {
   checkAuthorizationStatus: () => async (dispatch, getState, api) => {//кажется готово
     return api.get(`/user`)
       .then((response) => {
-        console.log(api.defaults.headers, response);
         dispatch(ActionCreator.setCurrentUser(response.data.user));
         dispatch(ActionCreator.requireAuthorization(true));
       })
@@ -86,7 +85,6 @@ const Operation = {
       }
     }).then(({data}) => {
       // console.log(response);
-      console.log(data.user);
       localStorage.setItem(
         'user',
         JSON.stringify({ email: data.user.email, password: newData.password, token: data.user.token }).toString()
@@ -115,3 +113,5 @@ const reducer = (state = initialState, action) => {
 };
 
 export {reducer, ActionType, ActionCreator, Operation};
+
+

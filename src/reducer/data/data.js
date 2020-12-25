@@ -3,7 +3,10 @@ import {extend} from "../../utils.js";
 const initialState = {
   articlesCountToShow: 20,
   articles: [],
-  isLoading: true
+  isLoading: true,
+  articleDetails: null,
+  fetchSuccess: null,
+  fetchError: null
 };
 
 const ActionType = {
@@ -56,7 +59,6 @@ const Operation = {
   loadArticles: (currentPage) => (dispatch, getState, api) => {
     const { articlesCountToShow } = getState().DATA;
     const articlesCountToOffset = (currentPage - 1) * articlesCountToShow;
-    console.log(articlesCountToOffset);
     dispatch(ActionCreator.setLoadingStatus(true));
 
     return api.get(`/articles?offset=${articlesCountToOffset}`)
@@ -70,10 +72,11 @@ const Operation = {
 
     return api.get(`/articles/${slug}`)
       .then((response) => {
+        console.log(response);
         dispatch(ActionCreator.loadArticleDetails(response.data.article));
         dispatch(ActionCreator.setLoadingStatus(false));
       });
-  }
+  },
 };
 
 const reducer = (state = initialState, action) => {

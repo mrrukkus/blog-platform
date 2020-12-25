@@ -29,8 +29,6 @@ const PostList = () => {
     dispatch(Operation.loadArticles(currentPage));
   }, [currentPage, dispatch]);
 
-  console.log('list rendered');
-
   const onPageNumberClick = (e) => {
     setCurrentPage(+e.target.innerText);
   };

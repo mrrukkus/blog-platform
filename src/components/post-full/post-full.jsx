@@ -1,18 +1,42 @@
-import './post-full.css';
+import { Operation as DataOperation } from '../../reducer/data/data';
+import { useDispatch, useSelector } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import Header from '../header/header.jsx';
 import Main from '../main/main.jsx';
-import { Operation } from '../../reducer/data/data';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { Operation as ArticleOperation, ActionCreator } from '../../reducer/articles/articles';
+
+import './post-full.css';
 
 const PostFull = (props) => {
-  const slug = props.match.params.slug;
   const dispatch = useDispatch();
-  const loadingStatus = useSelector((state) => state.DATA.isLoading);
+  const slug = props.match.params.slug;
   const article = useSelector((state) => state.DATA.articleDetails);
+
+  const currentUserName = useSelector((state) => {
+    return state.USER.currentUser ? state.USER.currentUser.username : '';
+  });
+
+  const [deletionAcception, setDeletionAcception] = useState(false);
+
+  const loadArticleHandler = useCallback(() => {
+    dispatch(DataOperation.loadArticleDetails(slug));
+  }, [slug, dispatch]);
+
+  const tagsList = () => {
+    return article.tagList.map((tag, i) => <span className="post__tag" key={i}>{tag}</span>);
+  };
+
+
   useEffect(() => {
-    dispatch(Operation.loadArticleDetails(slug));
-  }, [slug]);
+    loadArticleHandler();
+  }, [loadArticleHandler]);
+
+  const loadingStatus = useSelector((state) => state.DATA.isLoading);
+
+  const acceptionClassname = deletionAcception ? '' : 'acception--hidden';
+
   return (
     <>
       <Header/>
@@ -28,7 +52,7 @@ const PostFull = (props) => {
               <span className="post__likes-count">{article.favoritesCount}</span>
             </div>
             <div className="post__tags">
-              <span className="post__tag">Tag1</span>
+              {tagsList()}
             </div>
             <div className="post__description">
               {article.description}
@@ -37,29 +61,47 @@ const PostFull = (props) => {
               {/* Markdown разметка */}
             </div>
           </div>
-          <div className="post-author">
+          <div className="post-author-edit">
             <div className="post-author__author-information">
               <div className="post-author__name-wrapper">
                 <span className="post-author__name">{article.author.username}</span>
                 <span className="post-author__date">March 5, 2020</span>
               </div>
-              <img src={`${article.author.image}`} alt="user" className="post-author__image"/>
+              <img src={`${article.author.image}`} alt="user" className="post-author__image" width="46" height="46"/>
             </div>
-            <div className="post-author__control-buttons">
-              <div className="button button--delete">
-                Delete
-                <div className="acception">
-                  <span>Are you sure to delete this article?</span>
-                  <div className="acception__buttons">
-                    <button className="acception__button acception__button--cancel">No</button>
-                    <button className="acception__button acception__button--accept">Yes</button>
+            {currentUserName === article.author.username &&
+              <div className="post-author__control-buttons">
+                <div className="button button--delete" onClick={() => {
+                  setDeletionAcception(true)
+                  }}>
+                  Delete
+                  <div className={`acception ${acceptionClassname}`}>
+                    <span>Are you sure to delete this article?</span>
+                    <div className="acception__buttons">
+
+                      <button className="acception__button acception__button--cancel" onClick={(evt) => {
+                        evt.stopPropagation();
+                        setDeletionAcception(false);
+                      }}>
+                        No
+                      </button>
+
+                      <button className="acception__button acception__button--accept"
+                      onClick={() => {
+                        dispatch(ArticleOperation.deleteArticle(article));
+                      }}>
+                        Yes
+                      </button>
+                    </div>
                   </div>
                 </div>
+                <Link to={`/articles/${article.slug}/edit`} className="button button--edit" onClick={() => {
+                  dispatch(ActionCreator.setEditArticle(article))
+                }}>
+                  Edit
+                </Link>
               </div>
-              <button className="button button--edit">
-                Edit
-              </button>
-            </div>
+            }
           </div>
         </article>
         }
