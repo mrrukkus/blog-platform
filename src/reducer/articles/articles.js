@@ -63,6 +63,15 @@ const Operation = {
         throw err;
       });
   },
+  likeArticle: (slug) => (dispatch, getState, api) => {
+    return api.post(`articles/${slug}/favorite`)
+      .then((result) => {
+        alert('liked!', result);
+      })
+      .catch((err) => {
+        throw err;
+      })
+  }
 };
 
 const reducer = (state = initialState, action) => {

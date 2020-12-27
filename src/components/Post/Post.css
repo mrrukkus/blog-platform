@@ -32,24 +32,27 @@
   margin-right: 5px;
 }
 
-.post__like {
+.post__likes {
   display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
-.post__like input {
-  position: absolute;
-  clip: rect(0 0 0 0);
-  width: 1px;
-  height: 1px;
-  margin: -1px;
+.post__like-button {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
 }
 
-.post__like input ~ svg {
-  margin-right: 4px;
+.post__like-button--not-liked {
+  background-image: url(./icon-like.svg);
+  background-size: 16px 16px;
 }
 
-.post__like input:checked ~ svg {
-  fill: red;
+.post__like-button--liked {
+  background-image: url(./icon-like-active.svg);
+  background-size: 16px 16px;
 }
 
 .post__likes-count {
