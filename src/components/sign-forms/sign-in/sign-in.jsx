@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import '../sign-in.css';
@@ -12,7 +11,7 @@ import { useForm } from 'react-hook-form';
 
 const SignIn = () => {
   const dispatch = useDispatch();
-  
+
   const { handleSubmit, register, errors } = useForm();
   const authStatus = useSelector((state) => state.USER.authorizationStatus);
 

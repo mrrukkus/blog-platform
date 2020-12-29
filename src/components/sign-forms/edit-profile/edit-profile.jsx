@@ -2,7 +2,6 @@ import '../sign-in.css';
 
 import Header from '../../header/header.jsx';
 import Main from '../../main/main.jsx';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Operation as UserOperation } from '../../../reducer/user/user';
 import { useForm } from 'react-hook-form';
@@ -10,11 +9,6 @@ import { useForm } from 'react-hook-form';
 const EditProfile = () => {
   const dispatch = useDispatch();
   const { username, email, image } = useSelector((state) => state.USER.currentUser);
-
-  // const [usernameValue, setUsernameValue] = useState(currentUser.username);
-  // const [emailValue, setEmailValue] = useState(currentUser.email);
-  // const [passwordValue, setPasswordValue] = useState('');
-  // const [imageURL, setImageURLValue] = useState(currentUser.image ? currentUser.image : '');
 
   const { handleSubmit, register, errors } = useForm({
     mode: 'onSubmit',
@@ -41,10 +35,6 @@ const EditProfile = () => {
     }));
   };
 
-  // console.log(usernameValue);
-  // console.log(emailValue);
-  // console.log(passwordValue);
-  // console.log(imageURL);
   return (
     <>
       <Header/>
