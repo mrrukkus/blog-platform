@@ -62,7 +62,7 @@ const Operation = {
   register: (registrationData) => (dispatch, getState, api) => {//только исправить обработчики
     return api.post(`/users`, {
       "user": {
-        "username": registrationData.userName,
+        "username": registrationData.username,
         "email": registrationData.email,
         "password": registrationData.password
       }

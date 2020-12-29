@@ -68,3 +68,11 @@
   color: red;
   position: absolute;
 }
+
+.popup-form input:invalid {
+  border: red;
+}
+
+.popup-form .popup-form__error {
+  color: red;
+}

@@ -47,7 +47,7 @@ const PostFull = (props) => {
 
   const loadingStatus = useSelector((state) => state.DATA.isLoading);
   const acceptionClassname = deletionAcception ? '' : 'acception--hidden';
-  const likeStatusClassname = article.favorited ? 'post__like-button--liked' : 'post__like-button--not-liked';
+  const likeStatusClassname = article?.favorited ? 'post__like-button--liked' : '';
 
 
   return (
@@ -60,7 +60,7 @@ const PostFull = (props) => {
             <div className="post__title-area">
               <h2>{article.title}</h2>
               <div className="post__likes">
-              <button className={`post__like-button ${likeStatusClassname}`} onClick={() => {
+              <button className={`post__like-button post__like-button--not-liked ${likeStatusClassname}`} onClick={() => {
                 dispatch(ArticleOperation.likeArticle(article.slug));
               }}></button>
               <span className="post__likes-count">{article.favoritesCount}</span>
