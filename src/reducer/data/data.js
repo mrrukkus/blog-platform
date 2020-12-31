@@ -1,7 +1,7 @@
 import {extend} from "../../utils.js";
 
 const initialState = {
-  articlesCountToShow: 20,
+  articlesCountToShow: 8,
   articles: [],
   isLoading: true,
   articleDetails: null,
@@ -53,7 +53,7 @@ const Operation = {
         const {articlesCountToShow} = getState().DATA;
 
         dispatch(ActionCreator.setPagesCount(data.articlesCount / articlesCountToShow));
-        dispatch(ActionCreator.setLoadingStatus(false));
+        // dispatch(ActionCreator.setLoadingStatus(false));
       });
   },
   loadArticles: (currentPage) => (dispatch, getState, api) => {
@@ -64,7 +64,7 @@ const Operation = {
     return api.get(`/articles?offset=${articlesCountToOffset}`)
       .then((response) => {
         dispatch(ActionCreator.loadArticles(response.data.articles));
-        dispatch(ActionCreator.setLoadingStatus(false));
+        // dispatch(ActionCreator.setLoadingStatus(false));
       });
   },
   loadArticleDetails: (slug) => (dispatch, getState, api) => {
@@ -74,7 +74,7 @@ const Operation = {
       .then((response) => {
         console.log(response);
         dispatch(ActionCreator.loadArticleDetails(response.data.article));
-        dispatch(ActionCreator.setLoadingStatus(false));
+        // dispatch(ActionCreator.setLoadingStatus(false));
       });
   },
 };
@@ -84,10 +84,12 @@ const reducer = (state = initialState, action) => {
     case ActionType.SET_PAGES_COUNT:
       return extend(state, {
         pagesCount: action.payload,
+        isLoading: false
       });
     case ActionType.LOAD_ARTICLES:
       return extend(state, {
-        articles: action.payload
+        articles: action.payload,
+        isLoading: false
       });
     case ActionType.SET_LOADING_STATUS:
       return extend(state, {
@@ -95,7 +97,8 @@ const reducer = (state = initialState, action) => {
       });
     case ActionType.LOAD_ARTICLE_DETAILS:
       return extend(state, {
-        articleDetails: action.payload
+        articleDetails: action.payload,
+        isLoading: false
       });
     default:
       return state;

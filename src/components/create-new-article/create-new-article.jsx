@@ -34,7 +34,7 @@ const CreateNewArticle = () => {
   const TagsMarkup = useMemo(() => tagsList.map((tag, i) => {
     return (
       <div className="new-article__tag-container" key={i}>
-        <input type="text" className="new-article__tag-title" placeholder="Tag" value={tag} readOnly/>
+        <input type="text" className="new-article__tag-title" placeholder="Tag" value={tag} disabled={true}/>
         <button type='button' className="button button--delete" onClick={() => onTagDelete(i)}>Delete</button>
       </div>
     )

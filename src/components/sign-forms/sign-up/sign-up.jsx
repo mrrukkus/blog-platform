@@ -13,6 +13,7 @@ import { useRef } from 'react';
 const CreateNewAccount = () => {
   const dispatch = useDispatch();
   const authStatus = useSelector((state) => state.USER.authorizationStatus);
+  const fetchErrors = useSelector((state) => state.USER.errors);
 
   const { handleSubmit, register, errors, watch } = useForm();
   const password = useRef({});
@@ -64,6 +65,7 @@ const CreateNewAccount = () => {
               {errors.username?.type === "required" && <span className="popup-form__error">{errors.username.message}</span>}
               {errors.username?.type === "minLength" && <span className="popup-form__error">Username must be `&gt;`2 letters</span>}
               {errors.username?.type === "maxLength" && <span className="popup-form__error">Username must be less than 21 letters</span>}
+              {fetchErrors?.username && <span className="popup-form__error">Username {fetchErrors.username}</span>}
 
               <label htmlFor="email">Email address</label>
               <input
@@ -84,7 +86,7 @@ const CreateNewAccount = () => {
               />
               {errors.email?.type === "required" && <span className="popup-form__error">{errors.email.message}</span>}
               {errors.email?.type === "pattern" && <span className="popup-form__error">{errors.email.message}</span>}
-
+              {fetchErrors?.email && <span className="popup-form__error">Email {fetchErrors.email}</span>}
 
 
               <label htmlFor="password">Password</label>

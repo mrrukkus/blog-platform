@@ -14,6 +14,10 @@ const SignIn = () => {
 
   const { handleSubmit, register, errors } = useForm();
   const authStatus = useSelector((state) => state.USER.authorizationStatus);
+  const fetchErrors = useSelector((state) => state.USER.errors);
+  let errorsEntries;
+
+  errorsEntries = fetchErrors ? Object.entries(fetchErrors) : null;
 
   const formSubmitHandler = (evt) => {
     const { email, password } = evt;
@@ -50,7 +54,6 @@ const SignIn = () => {
                 })}
               />
               {errors.email?.type === "required" && <span className="popup-form__error">{errors.email.message}</span>}
-              {errors.email?.type === "pattern" && <span className="popup-form__error">{errors.email.message}</span>}
 
               <label htmlFor="password">Password</label>
               <input
@@ -66,6 +69,7 @@ const SignIn = () => {
                 })}
               />
               {errors.password?.type === "required" && <span className="popup-form__error">{errors.password.message}</span>}
+              {errorsEntries && <span className="popup-form__error">{errorsEntries[0].join(' ')}</span>}
 
               <button type="submit" className="popup-form__button-submit">Login</button>
               <span>Don’t have an account? <Link to="sign-up" className="popup-form__sign-up-link">Sign Up.</Link></span>

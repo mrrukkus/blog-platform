@@ -14,7 +14,7 @@ const userMarkup = (user, logout) =>
     <Link to="/new-article" className="user-buttons__create-article">Create article</Link>
     <Link to="/profile" className="user-buttons__profile">
       {user.username}
-      <img src={`${user.image}`} alt="user-avatar" width="46" height="46"/>
+      <img src={user.image ? `${user.image}` : `../user.png`} alt="user-avatar" width="46" height="46"/>
     </Link>
     <button className="user-buttons__logout" onClick={logout}>Log Out</button>
   </div>

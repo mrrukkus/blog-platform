@@ -44,7 +44,8 @@ const Post = ({ post }) => {
             <span className="post-author__name">{post.author.username}</span>
             <span className="post-author__date">{postDate}</span>
           </div>
-          <img src={`${post.author.image}`} alt="user" className="post-author__image" width="46" height="46"/>
+          <img src={post.author.image ? `${post.author.image}` : `user.png`} alt="user-avatar" width="46" height="46"/>
+
         </div>
       </article>
     </li>

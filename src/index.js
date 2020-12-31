@@ -14,7 +14,7 @@ import reportWebVitals from './reportWebVitals';
 import createAPI from "./api";
 
 const onUnauthorized = () => {
-  store.dispatch(ActionCreator.requireAuthorization(false));
+  store.dispatch(ActionCreator.requireAuthorization(false, null));
 };
 
 const api = createAPI(onUnauthorized);

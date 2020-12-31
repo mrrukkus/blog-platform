@@ -15,15 +15,14 @@ const getPosts = (posts) => {
 };
 
 const PostList = () => {
-  const loadingStatus = useSelector((state) => state.DATA.isLoading);
-  const pagesCount = useSelector((state) => state.DATA.pagesCount);
   const loadedArticles = useSelector((state) => state.DATA.articles);
+
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(Operation.getPagesCount());
-  }, [pagesCount, dispatch]);
+  console.log("=======>");
+  console.log(loadedArticles);
+  console.log('rendered');
+  console.log("<=======");
 
   useEffect(() => {
     dispatch(Operation.loadArticles(currentPage));
@@ -37,7 +36,7 @@ const PostList = () => {
     <>
       <Header/>
       <Main>
-        {loadingStatus ?
+        {!loadedArticles ?
           <ul className="posts">
             <h1>Загрузка...</h1>
           </ul> :
@@ -45,7 +44,7 @@ const PostList = () => {
           <ul className="posts">
             {getPosts(loadedArticles)}
           </ul>
-          <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageNumberClick={onPageNumberClick}/>
+          <Pagination currentPage={currentPage} onPageNumberClick={onPageNumberClick}/>
           </>
         }
       </Main>
