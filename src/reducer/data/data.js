@@ -2,7 +2,7 @@ import {extend} from "../../utils.js";
 const ARTICLES_COUNT_TO_SHOW = 20;
 
 const initialState = {
-  articles: [],
+  articles: null,
   isLoading: true,
   articleDetails: null,
   fetchSuccess: null,
@@ -58,7 +58,9 @@ const Operation = {
   loadArticles: (currentPage) => (dispatch, getState, api) => {
     const articlesCountToOffset = (currentPage - 1) * ARTICLES_COUNT_TO_SHOW;
     console.log(articlesCountToOffset);
-    dispatch(ActionCreator.setLoadingStatus(true));
+    dispatch(ActionCreator.loadArticles(null));
+
+    // dispatch(ActionCreator.setLoadingStatus(true));
 
     return api.get(`/articles?offset=${articlesCountToOffset}`)
       .then((response) => {

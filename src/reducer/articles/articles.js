@@ -71,7 +71,17 @@ const Operation = {
       .catch((err) => {
         throw err;
       })
+  },
+  dislikeArticle: (slug) => (dispatch, getState, api) => {
+    return api.delete(`articles/${slug}/favorite`)
+      .then((result) => {
+        alert('disliked!', result);
+      })
+      .catch((err) => {
+        throw err;
+      })
   }
+
 };
 
 const reducer = (state = initialState, action) => {

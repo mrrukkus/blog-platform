@@ -6,9 +6,11 @@ import format from 'date-fns/format';
 import {Operation as DataOperation} from '../../reducer/data/data';
 import './post.css';
 import {Operation as ArticlesOperation} from '../../reducer/articles/articles';
+import { useState } from 'react';
 
 const Post = ({ post }) => {
   const dispatch = useDispatch();
+  const [liked, setLiked] = useState(post.favorited);
 
   const tagsList = () => {
     return post.tagList.map((tag, i) => <span className="post__tag" key={i}>{tag}</span>);
@@ -16,7 +18,19 @@ const Post = ({ post }) => {
 
   const postDate = format(new Date(post.createdAt), 'PP');
 
-  const likeStatusClassname = post.favorited ? 'post__like-button--liked' : 'post__like-button--not-liked';
+  const likeStatusClassname = liked ? 'post__like-button--liked' : 'post__like-button--not-liked';
+
+  const onLikeClick = () => {
+    if (!liked) {
+      dispatch(ArticlesOperation.likeArticle(post.slug));
+      setLiked(true);
+      post.favoritesCount++;
+    } else {
+      dispatch(ArticlesOperation.dislikeArticle(post.slug));
+      setLiked(false);
+      post.favoritesCount--;
+    }
+  }
 
   return (
     <li>
@@ -27,9 +41,7 @@ const Post = ({ post }) => {
               dispatch(DataOperation.loadArticleDetails(post.slug));
             }}>{post.title}</Link>
             <div className="post__likes">
-              <button className={`post__like-button ${likeStatusClassname}`} onClick={() => {
-                dispatch(ArticlesOperation.likeArticle(post.slug));
-              }}></button>
+              <button className={`post__like-button ${likeStatusClassname}`} onClick={onLikeClick}></button>
               <span className="post__likes-count">{post.favoritesCount}</span>
             </div>
           </div>

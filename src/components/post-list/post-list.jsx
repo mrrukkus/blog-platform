@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-
+import { Spin }  from "antd";
+import 'antd/dist/antd.css';
 import './post-list.css';
 
 import Header from '../header/header.jsx';
@@ -16,6 +17,7 @@ const getPosts = (posts) => {
 
 const PostList = () => {
   const loadedArticles = useSelector((state) => state.DATA.articles);
+  console.log(!!loadedArticles, loadedArticles, 'bool');
 
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
@@ -32,17 +34,12 @@ const PostList = () => {
     <>
       <Header/>
       <Main>
-        {!loadedArticles ?
-          <ul className="posts">
-            <h1>Загрузка...</h1>
-          </ul> :
-          <>
-          <ul className="posts">
-            {getPosts(loadedArticles)}
-          </ul>
-          <Pagination currentPage={currentPage} onPageNumberClick={setCurrentPage}/>
-          </>
-        }
+        <>
+        <ul className="posts">
+          {!loadedArticles ? <Spin /> : getPosts(loadedArticles)}
+        </ul>
+        <Pagination currentPage={currentPage} onPageNumberClick={setCurrentPage}/>
+        </>
       </Main>
     </>
   )

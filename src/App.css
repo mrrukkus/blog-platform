@@ -78,6 +78,7 @@ button {
 
 .user-buttons__profile img {
   margin-left: 13px;
+  border-radius: 50%;
 }
 
 .user-buttons a {
@@ -85,10 +86,15 @@ button {
   margin-right: 26px;
 }
 
+.user-buttons__profile {
+  color: black;
+}
+
 .user-buttons__create-article {
   padding: 8px 10px;
   border: 1px solid #52C41A;
   border-radius: 5px;
+  color: #52C41A;
 }
 
 .user-buttons__logout {
