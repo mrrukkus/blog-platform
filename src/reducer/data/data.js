@@ -1,7 +1,7 @@
 import {extend} from "../../utils.js";
+const ARTICLES_COUNT_TO_SHOW = 20;
 
 const initialState = {
-  articlesCountToShow: 8,
   articles: [],
   isLoading: true,
   articleDetails: null,
@@ -50,15 +50,14 @@ const Operation = {
     return api.get(`/articles`)
       .then((response) => {
         const data = response.data;
-        const {articlesCountToShow} = getState().DATA;
-
-        dispatch(ActionCreator.setPagesCount(data.articlesCount / articlesCountToShow));
+        console.log(data.articlesCount);
+        dispatch(ActionCreator.setPagesCount(data.articlesCount));
         // dispatch(ActionCreator.setLoadingStatus(false));
       });
   },
   loadArticles: (currentPage) => (dispatch, getState, api) => {
-    const { articlesCountToShow } = getState().DATA;
-    const articlesCountToOffset = (currentPage - 1) * articlesCountToShow;
+    const articlesCountToOffset = (currentPage - 1) * ARTICLES_COUNT_TO_SHOW;
+    console.log(articlesCountToOffset);
     dispatch(ActionCreator.setLoadingStatus(true));
 
     return api.get(`/articles?offset=${articlesCountToOffset}`)
@@ -83,7 +82,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.SET_PAGES_COUNT:
       return extend(state, {
-        pagesCount: action.payload,
+        articlesCount: action.payload,
         isLoading: false
       });
     case ActionType.LOAD_ARTICLES:
@@ -105,4 +104,4 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export {reducer, ActionType, ActionCreator, Operation};
+export {reducer, ActionType, ActionCreator, Operation, ARTICLES_COUNT_TO_SHOW};

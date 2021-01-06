@@ -1,35 +1,36 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Spin, Pagination as AntdPagination}  from "antd";
 import './pagination.css';
+import 'antd/dist/antd.css';
 
+import { ARTICLES_COUNT_TO_SHOW } from '../../reducer/data/data.js';
 import { Operation } from '../../reducer/data/data';
 
 
-const Pagination = ({ currentPage, onPageNumberClick }) => {
-  const paginationLinks = [];
-  const pagesCount = useSelector((state) => state.DATA.pagesCount);
+const Pagination = ({ onPageNumberClick }) => {
+  const articlesCount = useSelector((state) => state.DATA.articlesCount);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(Operation.getPagesCount());
-  }, [pagesCount, dispatch])
-
-  for (let i = 1; i <= pagesCount; i++) {
-    paginationLinks.push(<a href={`#${i}`} className={`pagination__number ${currentPage === i ? `pagination__number--active` : null}`} onClick={onPageNumberClick} key={i}>{i}</a>)
-  }
+  }, [articlesCount, dispatch])
 
   return (
     <>
-      {!pagesCount ?
+      {!articlesCount ?
         <div className="pagination">
-          <h1>Загрузка...</h1>
+          <Spin />
         </div> :
         <div className="pagination">
-          <button className="pagination__arrow pagination__prev"></button>
-          <div className="pagination__numbers">
-            {paginationLinks}
-          </div>
-          <button className="pagination__arrow pagination__next"></button>
+          <AntdPagination
+            size="small"
+            total={`${articlesCount}`}
+            pageSize={`${ARTICLES_COUNT_TO_SHOW}`}
+            showSizeChanger={false}
+            onChange={(page) => {
+              onPageNumberClick(+page);
+            }}/>
         </div>
       }
     </>

@@ -8,6 +8,8 @@ import './post.css';
 import {Operation as ArticlesOperation} from '../../reducer/articles/articles';
 
 const Post = ({ post }) => {
+  const dispatch = useDispatch();
+
   const tagsList = () => {
     return post.tagList.map((tag, i) => <span className="post__tag" key={i}>{tag}</span>);
   };
@@ -16,7 +18,6 @@ const Post = ({ post }) => {
 
   const likeStatusClassname = post.favorited ? 'post__like-button--liked' : 'post__like-button--not-liked';
 
-  const dispatch = useDispatch();
   return (
     <li>
       <article className="post">

@@ -20,17 +20,13 @@ const PostList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   console.log("=======>");
-  console.log(loadedArticles);
+  console.log(currentPage);
   console.log('rendered');
   console.log("<=======");
 
   useEffect(() => {
     dispatch(Operation.loadArticles(currentPage));
   }, [currentPage, dispatch]);
-
-  const onPageNumberClick = (e) => {
-    setCurrentPage(+e.target.innerText);
-  };
 
   return (
     <>
@@ -44,7 +40,7 @@ const PostList = () => {
           <ul className="posts">
             {getPosts(loadedArticles)}
           </ul>
-          <Pagination currentPage={currentPage} onPageNumberClick={onPageNumberClick}/>
+          <Pagination currentPage={currentPage} onPageNumberClick={setCurrentPage}/>
           </>
         }
       </Main>
