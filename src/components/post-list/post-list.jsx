@@ -17,7 +17,6 @@ const PostList = () => {
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
-  console.log(currentPage);
   const loadedArticles = useSelector((state) => state.DATA.articles);
 
   useEffect(() => {

@@ -19,12 +19,10 @@ const Post = ({ post }) => {
       dispatch(ArticlesOperation.likeArticle(post.slug));
       setLiked(true);
       setLikesCount(() => likesCount + 1);
-      // post.favoritesCount+=1;
     } else {
       dispatch(ArticlesOperation.dislikeArticle(post.slug));
       setLiked(false);
       setLikesCount(() => likesCount - 1);
-      // post.favoritesCount-=1;
     }
   };
 
