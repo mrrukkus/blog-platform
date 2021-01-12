@@ -11,7 +11,6 @@ import {Operation as ArticlesOperation} from '../../reducer/articles/articles';
 import './post.css';
 
 const Post = ({ post }) => {
-  console.log(post);
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(post.favorited);
   const [likesCount, setLikesCount] = useState(post.favoritesCount)
