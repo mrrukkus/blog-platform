@@ -1,3 +1,4 @@
+import React from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -5,8 +6,8 @@ import {ActionCreator} from '../../reducer/user/user';
 
 const noAuthMarkup =
   <div className="auth-buttons">
-    <Link to={`/sign-in`} className="auth-buttons__button">Sign In</Link>
-    <Link to={`/sign-up`} className="auth-buttons__button auth-buttons__button--auth">Sign Up</Link>
+    <Link to="/sign-in" className="auth-buttons__button">Sign In</Link>
+    <Link to="/sign-up" className="auth-buttons__button auth-buttons__button--auth">Sign Up</Link>
   </div>;
 
 const userMarkup = (user, logout) =>
@@ -16,7 +17,7 @@ const userMarkup = (user, logout) =>
       {user.username}
       <img src={user.image ? `${user.image}` : `../user.png`} alt="user-avatar" width="46" height="46"/>
     </Link>
-    <button className="user-buttons__logout" onClick={logout}>Log Out</button>
+    <button type="button" className="user-buttons__logout" onClick={logout}>Log Out</button>
   </div>
 
 
@@ -34,7 +35,7 @@ const Header = () => {
   return (
     <header className="app-header">
       <div className="header-wrapper">
-        <Link to={`/`}>
+        <Link to="/">
           <h1 className="app-header__header">Realworld blog</h1>
         </Link>
         {userInterface}

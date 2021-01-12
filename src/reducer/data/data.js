@@ -1,12 +1,10 @@
-import {extend} from "../../utils.js";
 const ARTICLES_COUNT_TO_SHOW = 20;
 
 const initialState = {
   articles: null,
   isLoading: true,
   articleDetails: null,
-  fetchSuccess: null,
-  fetchError: null
+  fetchError: false
 };
 
 const ActionType = {
@@ -14,33 +12,30 @@ const ActionType = {
   LOAD_ARTICLES: `LOAD_ARTICLES`,
   SET_LOADING_STATUS: `SET_LOADING_STATUS`,
   LOAD_ARTICLE_DETAILS: `LOAD_ARTICLE_DETAILS`,
+  SET_FETCH_STATUS: `SET_FETCH_STATUS`
 };
 
 const ActionCreator = {
-  setPagesCount: (count) => {
-    return {
+  setPagesCount: (count) => ({
       type: ActionType.SET_PAGES_COUNT,
       payload: count
-    }
-  },
-  loadArticles: (data) => {
-    return {
+    }),
+  loadArticles: (data) => ({
       type: ActionType.LOAD_ARTICLES,
       payload: data
-    }
-  },
-  setLoadingStatus: (status) => {
-    return {
+    }),
+  setLoadingStatus: (status) => ({
       type: ActionType.SET_LOADING_STATUS,
       payload: status
-    }
-  },
-  loadArticleDetails: (article) => {
-    return {
+    }),
+  loadArticleDetails: (article) => ({
       type: ActionType.LOAD_ARTICLE_DETAILS,
       payload: article
-    }
-  }
+    }),
+  setFetchError: (status) => ({
+      type: ActionType.SET_FETCH_STATUS,
+      payload: status
+    })
 };
 
 const Operation = {
@@ -49,23 +44,23 @@ const Operation = {
 
     return api.get(`/articles`)
       .then((response) => {
-        const data = response.data;
-        console.log(data.articlesCount);
+        const { data } = response;
         dispatch(ActionCreator.setPagesCount(data.articlesCount));
-        // dispatch(ActionCreator.setLoadingStatus(false));
+      })
+      .catch((err) => {
+        throw err;
       });
   },
   loadArticles: (currentPage) => (dispatch, getState, api) => {
     const articlesCountToOffset = (currentPage - 1) * ARTICLES_COUNT_TO_SHOW;
-    console.log(articlesCountToOffset);
     dispatch(ActionCreator.loadArticles(null));
-
-    // dispatch(ActionCreator.setLoadingStatus(true));
 
     return api.get(`/articles?offset=${articlesCountToOffset}`)
       .then((response) => {
         dispatch(ActionCreator.loadArticles(response.data.articles));
-        // dispatch(ActionCreator.setLoadingStatus(false));
+      })
+      .catch((err) => {
+        throw err;
       });
   },
   loadArticleDetails: (slug) => (dispatch, getState, api) => {
@@ -73,9 +68,11 @@ const Operation = {
 
     return api.get(`/articles/${slug}`)
       .then((response) => {
-        console.log(response);
         dispatch(ActionCreator.loadArticleDetails(response.data.article));
-        // dispatch(ActionCreator.setLoadingStatus(false));
+      })
+      .catch((err) => {
+        dispatch(ActionCreator.setFetchError(true));
+        throw err;
       });
   },
 };
@@ -83,24 +80,33 @@ const Operation = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.SET_PAGES_COUNT:
-      return extend(state, {
+      return {
+        ...state,
         articlesCount: action.payload,
         isLoading: false
-      });
+      }
     case ActionType.LOAD_ARTICLES:
-      return extend(state, {
+      return {
+        ...state,
         articles: action.payload,
         isLoading: false
-      });
+      };
     case ActionType.SET_LOADING_STATUS:
-      return extend(state, {
+      return {
+        ...state,
         isLoading: action.payload
-      });
+      };
     case ActionType.LOAD_ARTICLE_DETAILS:
-      return extend(state, {
+      return {
+        ...state,
         articleDetails: action.payload,
         isLoading: false
-      });
+      };
+    case ActionType.SET_FETCH_STATUS:
+      return {
+        ...state,
+        fetchError: action.payload
+      }
     default:
       return state;
   }

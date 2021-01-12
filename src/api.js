@@ -1,4 +1,9 @@
 import axios from "axios";
+import {createStore, applyMiddleware} from "redux";
+import {composeWithDevTools} from "redux-devtools-extension";
+import thunk from "redux-thunk";
+import reducer from './reducer/reducer';
+import {ActionCreator} from "./reducer/user/user";
 
 const Error = {
   UNAUTHORIZED: 401
@@ -12,12 +17,10 @@ const createAPI = (onUnauthorized) => {
   });
 
   if (localStorage.getItem('user')) {
-    api.defaults.headers.common['Authorization'] = `Token ${JSON.parse(localStorage.getItem('user')).token}`;
+    api.defaults.headers.common.Authorization = `Token ${JSON.parse(localStorage.getItem('user')).token}`;
   }
 
-  const onSuccess = (response) => {
-    return response;
-  };
+  const onSuccess = (response) => response;
 
   const onFail = (err) => {
     const {response} = err;
@@ -36,4 +39,19 @@ const createAPI = (onUnauthorized) => {
   return api;
 };
 
-export default createAPI;
+/* eslint no-use-before-define: ["error", { "variables": false }] */
+const onUnauthorized = () => {
+  store.dispatch(ActionCreator.requireAuthorization(false, null));
+};
+
+const api = createAPI(onUnauthorized);
+
+const store = createStore(
+  reducer,
+  composeWithDevTools(
+      applyMiddleware(thunk.withExtraArgument(api))
+  )
+);
+
+export {api}
+export default store;

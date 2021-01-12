@@ -1,41 +1,32 @@
-import '../sign-in.css';
-
-import Header from '../../header/header.jsx';
-import Main from '../../main/main.jsx';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import '../sign-in.css';
 import { useForm } from 'react-hook-form';
-import { Operation } from '../../../reducer/user/user.js';
-import { useRef } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 
+import Header from '../../header/header';
+import Main from '../../main/main';
+import { Operation } from '../../../reducer/user/user';
 
 
 const CreateNewAccount = () => {
   const dispatch = useDispatch();
+
   const authStatus = useSelector((state) => state.USER.authorizationStatus);
   const fetchErrors = useSelector((state) => state.USER.errors);
 
   const { handleSubmit, register, errors, watch } = useForm();
-  const password = useRef({});
-  password.current = watch("password", "");
+  const passwordRef = useRef({});
+  passwordRef.current = watch("password", "");
 
   const formSubmitHandler = (evt) => {
     const { email, password, username } = evt;
-    console.log(email);
-    console.log(password);
-    console.log(username);
-    console.log({
-      email,
-      password,
-      username
-    });
     dispatch(Operation.register({
       email,
       password,
       username
     }));
   };
-
 
   return (
     authStatus ?
@@ -63,7 +54,7 @@ const CreateNewAccount = () => {
                 })}
               />
               {errors.username?.type === "required" && <span className="popup-form__error">{errors.username.message}</span>}
-              {errors.username?.type === "minLength" && <span className="popup-form__error">Username must be `&gt;`2 letters</span>}
+              {errors.username?.type === "minLength" && <span className="popup-form__error">Username must be more than 2 letters</span>}
               {errors.username?.type === "maxLength" && <span className="popup-form__error">Username must be less than 21 letters</span>}
               {fetchErrors?.username && <span className="popup-form__error">Username {fetchErrors.username}</span>}
 
@@ -119,7 +110,7 @@ const CreateNewAccount = () => {
                     value: true,
                     message: "This area is required"
                   },
-                  validate: value => value === password.current
+                  validate: value => value === passwordRef.current
                 })}
               />
               {errors.repeat_password?.type === "required" && <span className="popup-form__error">{errors.repeat_password.message}</span>}
@@ -137,7 +128,7 @@ const CreateNewAccount = () => {
               {errors.agreement?.type === "required" && <span className="popup-form__error">{errors.agreement.message}</span>}
 
               <button type="submit" className="popup-form__button-submit">Create</button>
-              <span>Already have an account? <a href="#signup" className="popup-form__sign-link">Sign In.</a></span>
+              <span>Already have an account? <Link to="/sign-in"className="popup-form__sign-link">Sign In.</Link></span>
             </form>
           </div>
         </Main>

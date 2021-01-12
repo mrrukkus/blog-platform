@@ -1,55 +1,38 @@
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import Header from '../header/header';
+import Main from '../main/main';
+import { Operation, ActionCreator } from '../../reducer/articles/articles';
 import './create-new-article.css';
-import Header from '../header/header.jsx';
-import Main from '../main/main.jsx';
-import { useCallback, useMemo, useState } from 'react';
-import { Operation } from '../../reducer/articles/articles';
-import { useDispatch } from 'react-redux';
 
 const CreateNewArticle = () => {
   const dispatch = useDispatch();
+
   const [titleValue, setTitleValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
   const [textValue, setTextValue] = useState('');
   const [tagsList, setTagsList] = useState([]);
-
   const [newTagValue, setNewTagValue] = useState('');
 
-  const onTagAdd = (evt) => {
-    console.log(tagsList, newTagValue);
-    evt.preventDefault();
-    setTagsList([...tagsList, newTagValue]);
-    setNewTagValue('');
-  };
+  const isSuccess = useSelector((state) => state.ARTICLES.isSuccess);
 
-  // const onTagDelete = (i) => {
-  //   const newTagsList = [...tagsList.slice(0, i), ...tagsList.slice(i + 1)];
-  //   setTagsList(newTagsList);
-  // };
+  useEffect(() => () => {
+    dispatch(ActionCreator.setSuccess(null));
+  }, [dispatch]);
+
+  const onTagAdd = (evt) => {
+    if (newTagValue.trim().length > 0) {
+      evt.preventDefault();
+      setTagsList([...tagsList, newTagValue.trim()]);
+      setNewTagValue('');
+    }
+  };
 
   const onTagDelete = useCallback((i) => {
     const newTagsList = [...tagsList.slice(0, i), ...tagsList.slice(i + 1)];
     setTagsList(newTagsList);
   }, [tagsList]);
-
-  const TagsMarkup = useMemo(() => tagsList.map((tag, i) => {
-    return (
-      <div className="new-article__tag-container" key={i}>
-        <input type="text" className="new-article__tag-title" placeholder="Tag" value={tag} disabled={true}/>
-        <button type='button' className="button button--delete" onClick={() => onTagDelete(i)}>Delete</button>
-      </div>
-    )
-  }), [tagsList, onTagDelete]);
-
-  // const returnTagsMarkup = () => {
-  //   tagsList.map((tag, i) => {
-  //     return (
-  //       <div className="new-article__tag-container" key={i}>
-  //         <input type="text" className="new-article__tag-title" placeholder="Tag" value={tag}/>
-  //         <button className="button button--delete" onClick={() => onTagDelete(i)}>Delete</button>
-  //       </div>
-  //     )
-  //   });
-  // };
 
   const newArticleSubmit = (evt) => {
     evt.preventDefault();
@@ -63,8 +46,16 @@ const CreateNewArticle = () => {
     dispatch(Operation.addNewArticle(newArticle));
   };
 
+  const TagsMarkup = useMemo(() => tagsList.map((tag, i) =>
+    (
+      <div className="new-article__tag-container" key={Math.random()}>
+        <input type="text" className="new-article__tag-title" placeholder="Tag" value={tag} disabled="true"/>
+        <button type='button' className="button button--delete" onClick={() => onTagDelete(i)}>Delete</button>
+      </div>
+    )
+  ), [tagsList, onTagDelete]);
 
-  return (
+  return (isSuccess ? <Redirect to="/" /> :
     <>
       <Header/>
       <Main>
@@ -80,10 +71,10 @@ const CreateNewArticle = () => {
             setDescriptionValue(evt.target.value);
           }}/>
 
-          <label htmlFor="">Text</label>
+          <label htmlFor="text">Text</label>
           <textarea name="Text" id="text" cols="30" rows="10" className="new-article__text" placeholder="Text" onChange={(evt) => {
             setTextValue(evt.target.value);
-          }}></textarea>
+          }} />
 
           <div className="new-article__tags">
             <h3>Tags</h3>
@@ -97,6 +88,7 @@ const CreateNewArticle = () => {
           </div>
 
           <button type='submit' className="new-article__submit-button">Send</button>
+          {isSuccess === false && <span className="error">Возникла ошибка</span>}
         </form>
       </Main>
     </>

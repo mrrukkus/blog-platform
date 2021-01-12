@@ -1,36 +1,38 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import PropTypes from 'prop-types';
 import format from 'date-fns/format';
 
 import {Operation as DataOperation} from '../../reducer/data/data';
-import './post.css';
 import {Operation as ArticlesOperation} from '../../reducer/articles/articles';
-import { useState } from 'react';
+
+import './post.css';
 
 const Post = ({ post }) => {
+  console.log(post);
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(post.favorited);
-
-  const tagsList = () => {
-    return post.tagList.map((tag, i) => <span className="post__tag" key={i}>{tag}</span>);
-  };
-
-  const postDate = format(new Date(post.createdAt), 'PP');
-
-  const likeStatusClassname = liked ? 'post__like-button--liked' : 'post__like-button--not-liked';
-
+  const [likesCount, setLikesCount] = useState(post.favoritesCount)
   const onLikeClick = () => {
     if (!liked) {
       dispatch(ArticlesOperation.likeArticle(post.slug));
       setLiked(true);
-      post.favoritesCount++;
+      setLikesCount(() => likesCount + 1);
+      // post.favoritesCount+=1;
     } else {
       dispatch(ArticlesOperation.dislikeArticle(post.slug));
       setLiked(false);
-      post.favoritesCount--;
+      setLikesCount(() => likesCount - 1);
+      // post.favoritesCount-=1;
     }
-  }
+  };
+
+  const tagsList = () => post.tagList.map((tag) => <span className="post__tag" key={Math.random()}>{tag}</span>);
+
+  const likeStatusClassname = liked ? 'post__like-button--liked' : 'post__like-button--not-liked';
+  const postDate = format(new Date(post.createdAt), 'PP');
 
   return (
     <li>
@@ -41,8 +43,8 @@ const Post = ({ post }) => {
               dispatch(DataOperation.loadArticleDetails(post.slug));
             }}>{post.title}</Link>
             <div className="post__likes">
-              <button className={`post__like-button ${likeStatusClassname}`} onClick={onLikeClick}></button>
-              <span className="post__likes-count">{post.favoritesCount}</span>
+              <button type="button" className={`post__like-button ${likeStatusClassname}`} onClick={onLikeClick}/>
+              <span className="post__likes-count">{likesCount}</span>
             </div>
           </div>
           <div className="post__tags">
@@ -64,5 +66,28 @@ const Post = ({ post }) => {
     </li>
   )
 };
+
+Post.propTypes = {
+  post: PropTypes.shape({
+    author: PropTypes.shape({
+      bio: PropTypes.oneOfType([
+        PropTypes.string.isRequired,
+        PropTypes.oneOf([null]).isRequired,
+      ]),
+      following: PropTypes.bool.isRequired,
+      image: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired,
+    }),
+    body: PropTypes.string.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    favorited: PropTypes.bool.isRequired,
+    favoritesCount: PropTypes.number.isRequired,
+    slug: PropTypes.string.isRequired,
+    tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
+    title: PropTypes.string.isRequired,
+    updatedAt: PropTypes.string.isRequired,
+  }).isRequired
+}
 
 export default Post;

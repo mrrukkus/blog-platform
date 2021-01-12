@@ -1,12 +1,13 @@
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 import '../sign-in.css';
 
-import Header from '../../header/header.jsx';
-import Main from '../../main/main.jsx';
-import { Operation } from '../../../reducer/user/user.js';
-import { Link, Redirect } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import Header from '../../header/header';
+import Main from '../../main/main';
+import { Operation } from '../../../reducer/user/user';
 
 
 const SignIn = () => {
@@ -15,9 +16,8 @@ const SignIn = () => {
   const { handleSubmit, register, errors } = useForm();
   const authStatus = useSelector((state) => state.USER.authorizationStatus);
   const fetchErrors = useSelector((state) => state.USER.errors);
-  let errorsEntries;
 
-  errorsEntries = fetchErrors ? Object.entries(fetchErrors) : null;
+  const errorsEntries = fetchErrors ? Object.entries(fetchErrors) : null;
 
   const formSubmitHandler = (evt) => {
     const { email, password } = evt;

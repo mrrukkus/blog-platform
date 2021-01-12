@@ -1,102 +1,76 @@
-import {extend} from "../../utils.js";
-import {Operation as DataOperation} from "../data/data";
-
 const initialState = {
   currentPageNumber: 1,
-  articleToEdit: null,
+  isLoading: true,
+  isSuccess: null
 };
 
 const ActionType = {
-  SET_ARTICLE_EDIT: `SET_ARTICLE_EDIT`,
-  SET_CURRENT_PAGE_NUMBER: `SET_CONTACT_SEARCH_VALUE`
+  SET_CURRENT_PAGE_NUMBER: `SET_CONTACT_SEARCH_VALUE`,
+  SET_IS_SUCCESS: `SET_IS_SUCCESS`
 };
 
 const ActionCreator = {
-  setEditArticle: (articleId) => ({
-    type: ActionType.SET_ARTICLE_EDIT,
-    payload: articleId,
-  }),
   setCurrentPage: (pageNumber) => ({
     type: ActionType.SET_CURRENT_PAGE_NUMBER,
     payload: pageNumber,
   }),
+  setSuccess: (status) => ({
+    type: ActionType.SET_IS_SUCCESS,
+    payload: status
+  })
 };
 
 const Operation = {
-  addNewArticle: (article) => (dispatch, getState, api) => {
-    return api.post(`/articles`, {
+  addNewArticle: (article) => (dispatch, getState, api) => api.post(`/articles`, {
+      "article": article
+    }).then(() => {
+        dispatch(ActionCreator.setSuccess(true));
+    }).catch((err) => {
+        dispatch(ActionCreator.setSuccess(false));
+        throw err;
+    }),
+  deleteArticle: (article) => (dispatch, getState, api) => api.delete(`/articles/${article.slug}`)
+      .then(() => {
+        dispatch(ActionCreator.setSuccess(true));
+      }).catch((err) => {
+        dispatch(ActionCreator.setSuccess(false));
+        throw err;
+    }),
+  putEditedArticle: (article, slug) => (dispatch, getState, api) => api.put(`/articles/${slug}`, {
       "article": article
     })
       .then(() => {
-        // const { currentPageNumber } = getState();
-
-        // dispatch(DataOperation.loadArticles(currentPageNumber));
-        alert(`Контакт успешно создан`);
-      })
-      .catch((err) => {
-        alert(`Возникла ошибка при отправке`, err);
-      });
-  },
-  deleteArticle: (article) => (dispatch, getState, api) => {
-    return api.delete(`/articles/${article.slug}`)
-      .then((result) => {
-        // const { currentPageNumber } = getState();
-
-        // dispatch(DataOperation.loadContacts(currentPageNumber));
-        alert(`Контакт успешно удален`, result);
+        dispatch(ActionCreator.setSuccess(true));
       }).catch((err) => {
-        alert(`Возникла ошибка при удалении статьи`);
+        dispatch(ActionCreator.setSuccess(false));
         throw err;
-      });
-  },
-  putEditedArticle: (article, slug) => (dispatch, getState, api) => {
-    return api.put(`/articles/${slug}`, {
-      "article": article
-    })
-      .then(() => {
-        const { currentPageNumber } = getState();
-
-        // dispatch(DataOperation.loadContacts(currentPageNumber))
-        alert(`Контакт успешно сохранен`);
-      }).catch((err) => {
-        alert(`Возникла ошибка при изменении статьи`);
+      }),
+  likeArticle: (slug) => (dispatch, getState, api) => api.post(`articles/${slug}/favorite`)
+      .catch((err) => {
         throw err;
-      });
-  },
-  likeArticle: (slug) => (dispatch, getState, api) => {
-    return api.post(`articles/${slug}/favorite`)
-      .then((result) => {
-        alert('liked!', result);
-      })
+      }),
+  dislikeArticle: (slug) => (dispatch, getState, api) => api.delete(`articles/${slug}/favorite`)
       .catch((err) => {
         throw err;
       })
-  },
-  dislikeArticle: (slug) => (dispatch, getState, api) => {
-    return api.delete(`articles/${slug}/favorite`)
-      .then((result) => {
-        alert('disliked!', result);
-      })
-      .catch((err) => {
-        throw err;
-      })
-  }
-
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.SET_ARTICLE_EDIT:
-      return extend(state, {
-        articleToEdit: action.payload
-      });
     case ActionType.SET_CURRENT_PAGE_NUMBER:
-      return extend(state, {
+      return {
+        ...state,
         currentPageNumber: action.payload
-      });
+      };
+    case ActionType.SET_IS_SUCCESS:
+      return {
+        ...state,
+        isSuccess: action.payload
+      };
     default:
       return state;
   }
 };
 
 export {reducer, ActionType, ActionCreator, Operation};
+

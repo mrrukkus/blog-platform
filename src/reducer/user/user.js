@@ -1,9 +1,7 @@
-import {extend} from '../../utils.js';
-
-
 const initialState = {
   authorizationStatus: false,
   currentUser: null,
+  isLoading: true,
   errors: null
 };
 
@@ -14,82 +12,65 @@ const ActionType = {
 };
 
 const ActionCreator = {
-  requireAuthorization: (status, user) => {
-    return {
+  requireAuthorization: (status, user) => ({
       type: ActionType.REQUIRED_AUTHORIZATION,
       status,
       user
-    };
-  },
-  setCurrentUser: (user) => {
-    return {
+    }),
+  setCurrentUser: (user) => ({
       type: ActionType.SET_CURRENT_USER,
       user
-    }
-  },
-  setErrors: (errors) => {
-    return {
+    }),
+  setErrors: (errors) => ({
       type: ActionType.SET_ERRORS,
       errors
-    }
-  }
+    })
 };
 
 const Operation = {
-  checkAuthorizationStatus: () => async (dispatch, getState, api) => {//кажется готово
-    return api.get(`/user`)
+  checkAuthorizationStatus: () => async (dispatch, getState, api) => api.get(`/user`)
       .then((response) => {
-        // dispatch(ActionCreator.setCurrentUser(response.data.user));
         dispatch(ActionCreator.requireAuthorization(true, response.data.user));
       })
       .catch((err) => {
         throw err;
-      });
-  },
-  login: (authData) => (dispatch, getState, api) => { //дописать обработчики
-    return api.post(`/users/login`, {
+      }),
+  login: (authData) => (dispatch, getState, api) =>
+    api.post(`/users/login`, {
       "user": {
         "email": authData.email,
         "password": authData.password
       }
     })
       .then(({ data }) => {
-        console.log(data);
-        api.defaults.headers.common['Authorization'] = `Token ${data.user.token}`;
-        // dispatch(ActionCreator.setCurrentUser(data.user));
+       // eslint-disable-next-line no-param-reassign
+       api.defaults.headers.common.Authorization = `Token ${data.user.token}`;
         dispatch(ActionCreator.requireAuthorization(true, data.user));
         dispatch(ActionCreator.setErrors(null));
         localStorage.setItem(
           'user',
-          JSON.stringify({ email: data.user.email, password: authData.password, token: data.user.token }).toString()
+          JSON.stringify({ ...data.user }).toString()
         )
       })
       .catch(({response}) => {
-        console.log(response);
         dispatch(ActionCreator.setErrors(response.data.errors));
-        alert(`Возникла ошибка при входе. Ошибка: `);
-      });
-  },
-  register: (registrationData) => (dispatch, getState, api) => {//только исправить обработчики
-    return api.post(`/users`, {
+      }),
+  register: (registrationData) => (dispatch, getState, api) =>
+    api.post(`/users`, {
       "user": {
         "username": registrationData.username,
         "email": registrationData.email,
         "password": registrationData.password
       }
     })
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         dispatch(ActionCreator.setErrors(null));
       })
       .catch(({response}) => {
-        console.log(response);
         dispatch(ActionCreator.setErrors(response.data.errors));
-      })
-  },
-  editProfile: (newData) => (dispatch, getState, api) => {
-    console.log(newData, 'new data');
-    return api.put(`/user`, {
+      }),
+  editProfile: (newData) => (dispatch, getState, api) =>
+    api.put(`/user`, {
       "user": {
         "username": newData.username,
         "email": newData.email,
@@ -97,34 +78,35 @@ const Operation = {
         "image": newData.image
       }
     }).then(({data}) => {
-      // console.log(response);
       localStorage.setItem(
         'user',
         JSON.stringify({ email: data.user.email, password: newData.password, token: data.user.token }).toString()
       )
       dispatch(ActionCreator.setCurrentUser(data.user));
     }).catch((err) => {
-      alert('Введенные логин и/или почта заняты!');
       throw err;
     })
-  }
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.REQUIRED_AUTHORIZATION:
-      return extend(state, {
+      return {
+        ...state,
         authorizationStatus: action.status,
-        currentUser: action.user
-      });
+        currentUser: action.user,
+        isLoading: false
+      };
     case ActionType.SET_CURRENT_USER:
-      return extend(state, {
+      return {
+        ...state,
         currentUser: action.user
-      });
+      };
     case ActionType.SET_ERRORS:
-      return extend(state, {
+      return {
+        ...state,
         errors: action.errors
-      })
+      };
     default:
       return state;
   }
