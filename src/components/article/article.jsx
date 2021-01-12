@@ -8,7 +8,7 @@ import format from 'date-fns/format';
 import {Operation as DataOperation} from '../../reducer/data/data';
 import {Operation as ArticlesOperation} from '../../reducer/articles/articles';
 
-import './post.css';
+import './article.css';
 
 const Post = ({ post }) => {
   const dispatch = useDispatch();

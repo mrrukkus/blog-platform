@@ -2,18 +2,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { Spin }  from "antd";
 import 'antd/dist/antd.css';
-import './post-list.css';
+import './article-list.css';
 
 import Header from '../header/header';
 import Main from '../main/main';
-import Post from '../post/post';
+import Post from '../article/article';
 import Pagination from '../pagination/pagination';
 import { Operation, ActionCreator } from '../../reducer/data/data';
 
 
 const getPosts = (posts) => posts.map((post) => <Post post={post} key={post.createdAt} />);
 
-const PostList = () => {
+const ArticleList = () => {
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,4 +45,4 @@ const PostList = () => {
   )
 }
 
-export default PostList;
+export default ArticleList;

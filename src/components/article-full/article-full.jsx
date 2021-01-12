@@ -13,9 +13,9 @@ import Header from '../header/header';
 import Main from '../main/main';
 import { Operation as ArticleOperation } from '../../reducer/articles/articles';
 
-import './post-full.css';
+import './article-full.css';
 
-const PostFull = (props) => {
+const ArticleFull = (props) => {
   const dispatch = useDispatch();
   const {
     match: {
@@ -132,7 +132,7 @@ const PostFull = (props) => {
   )
 };
 
-PostFull.propTypes = {
+ArticleFull.propTypes = {
   match: PropTypes.shape({
     isExact: PropTypes.bool,
     params: PropTypes.objectOf(PropTypes.string),
@@ -142,4 +142,4 @@ PostFull.propTypes = {
 }
 
 
-export default PostFull;
+export default ArticleFull;
