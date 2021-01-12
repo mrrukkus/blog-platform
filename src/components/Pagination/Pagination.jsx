@@ -8,7 +8,7 @@ import 'antd/dist/antd.css';
 import { Operation, ARTICLES_COUNT_TO_SHOW } from '../../reducer/data/data';
 
 
-const Pagination = ({ onPageNumberClick }) => {
+const Pagination = ({ onPageNumberClick, currentPage }) => {
   const articlesCount = useSelector((state) => state.DATA.articlesCount);
   const dispatch = useDispatch();
 
@@ -24,6 +24,7 @@ const Pagination = ({ onPageNumberClick }) => {
         </div> :
         <div className="pagination">
           <AntdPagination
+            current={currentPage}
             size="small"
             total={`${articlesCount}`}
             pageSize={`${ARTICLES_COUNT_TO_SHOW}`}
@@ -37,12 +38,9 @@ const Pagination = ({ onPageNumberClick }) => {
   )
 };
 
-Pagination.defaultProp = {
-  onPageNumberClick: () => {}
-};
-
 Pagination.propTypes = {
-  onPageNumberClick: PropTypes.func.isRequired
+  onPageNumberClick: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
 export default Pagination;
