@@ -37,6 +37,12 @@
       "pre-commit": "lint-staged"
     }
   },
+  "lint-staged": {
+    ".jsx": [
+      "npm run lint",
+      "npm run format"
+    ]
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
