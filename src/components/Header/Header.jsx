@@ -2,22 +2,26 @@ import React from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import {ActionCreator} from '../../reducer/user/user';
+import { ActionCreator } from '../../reducer/user/user';
+import routePaths, { localStorageActions } from '../../routes';
+
+const authButtonsClass = 'auth-buttons';
+const userButtonsClass = 'user-buttons';
 
 const noAuthMarkup =
-  <div className="auth-buttons">
-    <Link to="/sign-in" className="auth-buttons__button">Sign In</Link>
-    <Link to="/sign-up" className="auth-buttons__button auth-buttons__button--auth">Sign Up</Link>
+  <div className={authButtonsClass}>
+    <Link to={routePaths.signIn} className={`${authButtonsClass}__button`}>Sign In</Link>
+    <Link to={routePaths.signUp} className={`${authButtonsClass}__button ${authButtonsClass}__button--auth`}>Sign Up</Link>
   </div>;
 
 const userMarkup = (user, logout) =>
-  <div className="user-buttons">
-    <Link to="/new-article" className="user-buttons__create-article">Create article</Link>
-    <Link to="/profile" className="user-buttons__profile">
+  <div className={userButtonsClass}>
+    <Link to={routePaths.newArticle} className={`${userButtonsClass}__create-article`}>Create article</Link>
+    <Link to={routePaths.profile} className={`${userButtonsClass}__profile`}>
       {user.username}
       <img src={user.image ? `${user.image}` : `../user.png`} alt="user-avatar" width="46" height="46"/>
     </Link>
-    <button type="button" className="user-buttons__logout" onClick={logout}>Log Out</button>
+    <button type="button" className={`${userButtonsClass}__logout`} onClick={logout}>Log Out</button>
   </div>
 
 
@@ -27,7 +31,7 @@ const Header = () => {
 
   const logout = () => {
     dispatch(ActionCreator.requireAuthorization(false, null));
-    localStorage.removeItem('user');
+    localStorageActions.removeUser();
   };
 
   const userInterface = currentUser ? userMarkup(currentUser, logout) : noAuthMarkup;
@@ -35,7 +39,7 @@ const Header = () => {
   return (
     <header className="app-header">
       <div className="header-wrapper">
-        <Link to="/">
+        <Link to={routePaths.main}>
           <h1 className="app-header__header">Realworld blog</h1>
         </Link>
         {userInterface}

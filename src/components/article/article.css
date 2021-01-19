@@ -46,12 +46,12 @@
 }
 
 .post__like-button--not-liked {
-  background-image: url(./icon-like.svg);
+  background-image: url("../../mediaFiles/icon-like.svg");
   background-size: 16px 16px;
 }
 
 .post__like-button--liked {
-  background-image: url(./icon-like-active.svg);
+  background-image: url("../../mediaFiles/icon-like-active.svg");
   background-size: 16px 16px;
 }
 

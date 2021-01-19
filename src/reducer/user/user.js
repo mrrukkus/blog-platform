@@ -1,91 +1,41 @@
 const initialState = {
   authorizationStatus: false,
   currentUser: null,
-  isLoading: true,
-  errors: null
+  isLoading: false,
+  errors: null,
+  isSuccess: null
 };
 
 const ActionType = {
   REQUIRED_AUTHORIZATION: `REQUIRED_AUTHORIZATION`,
   SET_CURRENT_USER: `SET_CURRENT_USER`,
-  SET_ERRORS: `SET_ERRORS`
+  SET_ERRORS: `SET_ERRORS`,
+  SET_SUCCESS: `SET_SUCCESS`,
+  SET_IS_LOADING: `SET_IS_LOADING`
 };
 
 const ActionCreator = {
   requireAuthorization: (status, user) => ({
-      type: ActionType.REQUIRED_AUTHORIZATION,
-      status,
-      user
-    }),
+    type: ActionType.REQUIRED_AUTHORIZATION,
+    status,
+    user
+  }),
   setCurrentUser: (user) => ({
-      type: ActionType.SET_CURRENT_USER,
-      user
-    }),
+    type: ActionType.SET_CURRENT_USER,
+    user
+  }),
   setErrors: (errors) => ({
-      type: ActionType.SET_ERRORS,
-      errors
-    })
-};
-
-const Operation = {
-  checkAuthorizationStatus: () => async (dispatch, getState, api) => api.get(`/user`)
-      .then((response) => {
-        dispatch(ActionCreator.requireAuthorization(true, response.data.user));
-      })
-      .catch((err) => {
-        throw err;
-      }),
-  login: (authData) => (dispatch, getState, api) =>
-    api.post(`/users/login`, {
-      "user": {
-        "email": authData.email,
-        "password": authData.password
-      }
-    })
-      .then(({ data }) => {
-       // eslint-disable-next-line no-param-reassign
-       api.defaults.headers.common.Authorization = `Token ${data.user.token}`;
-        dispatch(ActionCreator.requireAuthorization(true, data.user));
-        dispatch(ActionCreator.setErrors(null));
-        localStorage.setItem(
-          'user',
-          JSON.stringify({ ...data.user }).toString()
-        )
-      })
-      .catch(({response}) => {
-        dispatch(ActionCreator.setErrors(response.data.errors));
-      }),
-  register: (registrationData) => (dispatch, getState, api) =>
-    api.post(`/users`, {
-      "user": {
-        "username": registrationData.username,
-        "email": registrationData.email,
-        "password": registrationData.password
-      }
-    })
-      .then(() => {
-        dispatch(ActionCreator.setErrors(null));
-      })
-      .catch(({response}) => {
-        dispatch(ActionCreator.setErrors(response.data.errors));
-      }),
-  editProfile: (newData) => (dispatch, getState, api) =>
-    api.put(`/user`, {
-      "user": {
-        "username": newData.username,
-        "email": newData.email,
-        "password": newData.password,
-        "image": newData.image
-      }
-    }).then(({data}) => {
-      localStorage.setItem(
-        'user',
-        JSON.stringify({ email: data.user.email, password: newData.password, token: data.user.token }).toString()
-      )
-      dispatch(ActionCreator.setCurrentUser(data.user));
-    }).catch((err) => {
-      throw err;
-    })
+    type: ActionType.SET_ERRORS,
+    errors
+  }),
+  setSuccess: (status) => ({
+    type: ActionType.SET_SUCCESS,
+    status
+  }),
+  setIsLoading: (status) => ({
+    type: ActionType.SET_IS_LOADING,
+    status
+  })
 };
 
 const reducer = (state = initialState, action) => {
@@ -107,11 +57,21 @@ const reducer = (state = initialState, action) => {
         ...state,
         errors: action.errors
       };
+    case ActionType.SET_SUCCESS:
+      return {
+        ...state,
+        isSuccess: action.status
+      };
+    case ActionType.SET_IS_LOADING:
+      return {
+        ...state,
+        isLoading: action.status
+      }
     default:
       return state;
   }
 };
 
-export {reducer, ActionType, ActionCreator, Operation};
+export {reducer, ActionType, ActionCreator};
 
 

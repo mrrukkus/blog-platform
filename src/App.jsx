@@ -9,28 +9,28 @@ import SignIn from './components/sign-forms/sign-in/sign-in';
 import EditProfile from './components/sign-forms/edit-profile/edit-profile';
 import SignUp from './components/sign-forms/sign-up/sign-up';
 import ArticleFull from './components/article-full/article-full';
-import CreateNewArticle from './components/create-new-article/create-new-article';
-import EditArticle from './components/edit-article/edit-article';
 import ArticleList from './components/article-list/article-list';
 import NotFound from './components/not-found/not-found';
-import { Operation as UserOperation } from './reducer/user/user';
+import ArticleForm from './components/article-form/article-form';
+import { UserApiRequests } from './api';
+import routePaths from './routes';
 
 
 function App() {
   const dispatch = useDispatch();
-  dispatch(UserOperation.checkAuthorizationStatus());
+  dispatch(UserApiRequests.checkAuthorizationStatus());
 
   return (
     <BrowserRouter>
       <ErrorBoundary>
         <Switch>
-          <Route exact path={["/", "/articles"]} component={ArticleList}/>
-          <Route exact path="/articles/:slug" component={ArticleFull}/>
-          <Route exact path="/articles/:slug/edit" component={EditArticle}/>
-          <Route exact path="/sign-in" component={SignIn}/>
-          <Route exact path="/sign-up" component={SignUp}/>
-          <Route exact path="/profile" component={EditProfile}/>
-          <Route exact path="/new-article" component={CreateNewArticle}/>
+          <Route exact path={[routePaths.main, routePaths.mainArticles]} component={ArticleList}/>
+          <Route exact path={routePaths.articleStatic} component={ArticleFull}/>
+          <Route exact path={routePaths.articleEditStatic} component={ArticleForm}/>
+          <Route exact path={routePaths.signIn} component={SignIn}/>
+          <Route exact path={routePaths.signUp} component={SignUp}/>
+          <Route exact path={routePaths.profile} component={EditProfile}/>
+          <Route exact path={routePaths.newArticle} component={ArticleForm}/>
           <Route component={NotFound}/>
         </Switch>
       </ErrorBoundary>

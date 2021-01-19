@@ -3,8 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Header from '../header/header';
 import Main from '../main/main';
-import { Operation, ActionCreator } from '../../reducer/articles/articles';
+import { ActionCreator } from '../../reducer/articles/articles';
+import { ArticlesApiRequests } from '../../api';
+
 import './create-new-article.css';
+import routePaths from '../../routes';
 
 const CreateNewArticle = () => {
   const dispatch = useDispatch();
@@ -43,7 +46,7 @@ const CreateNewArticle = () => {
       "tagList": tagsList
     };
 
-    dispatch(Operation.addNewArticle(newArticle));
+    dispatch(ArticlesApiRequests.addNewArticle(newArticle));
   };
 
   const TagsMarkup = useMemo(() => tagsList.map((tag, i) =>
@@ -55,7 +58,7 @@ const CreateNewArticle = () => {
     )
   ), [tagsList, onTagDelete]);
 
-  return (isSuccess ? <Redirect to="/" /> :
+  return (isSuccess ? <Redirect to={routePaths.main} /> :
     <>
       <Header/>
       <Main>

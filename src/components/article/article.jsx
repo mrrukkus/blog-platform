@@ -1,62 +1,75 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import format from 'date-fns/format';
+import classNames from 'classnames';
 
-import {Operation as DataOperation} from '../../reducer/data/data';
-import {Operation as ArticlesOperation} from '../../reducer/articles/articles';
+import { ArticlesApiRequests, DataApiRequests } from '../../api';
+import routePaths from '../../routes';
 
 import './article.css';
 
-const Post = ({ post }) => {
+const Article = ({ article }) => {
   const dispatch = useDispatch();
-  const [liked, setLiked] = useState(post.favorited);
-  const [likesCount, setLikesCount] = useState(post.favoritesCount)
+  const authorizationStatus = useSelector((state) => state.USER.authorizationStatus);
+  const [liked, setLiked] = useState(article.favorited);
+  const [likesCount, setLikesCount] = useState(article.favoritesCount)
   const onLikeClick = () => {
     if (!liked) {
-      dispatch(ArticlesOperation.likeArticle(post.slug));
+      dispatch(ArticlesApiRequests.likeArticle(article.slug));
       setLiked(true);
       setLikesCount(() => likesCount + 1);
     } else {
-      dispatch(ArticlesOperation.dislikeArticle(post.slug));
+      dispatch(ArticlesApiRequests.dislikeArticle(article.slug));
       setLiked(false);
       setLikesCount(() => likesCount - 1);
     }
   };
+  const postClass = 'post';
+  const postAuthorClass = 'post-author';
 
-  const tagsList = () => post.tagList.map((tag) => <span className="post__tag" key={Math.random()}>{tag}</span>);
+  const tagsList = () => article.tagList.map((tag) => <span className={`${postClass}__tag`} key={Math.random()}>{tag}</span>);
 
-  const likeStatusClassname = liked ? 'post__like-button--liked' : 'post__like-button--not-liked';
-  const postDate = format(new Date(post.createdAt), 'PP');
+  const likeStatusClass = classNames(`${postClass}__like-button`, {
+    [`${postClass}__like-button--liked`]: liked,
+    [`${postClass}__like-button--not-liked`]: !liked
+  });
+
+  const articleDate = format(new Date(article.createdAt), 'PP');
 
   return (
     <li>
-      <article className="post">
-        <div className="post__content">
-          <div className="post__title-area">
-            <Link to={`/articles/${post.slug}`} onClick={() => {
-              dispatch(DataOperation.loadArticleDetails(post.slug));
-            }}>{post.title}</Link>
-            <div className="post__likes">
-              <button type="button" className={`post__like-button ${likeStatusClassname}`} onClick={onLikeClick}/>
-              <span className="post__likes-count">{likesCount}</span>
+      <article className={postClass}>
+        <div className={`${postClass}__content`}>
+          <div className={`${postClass}__title-area`}>
+            <Link to={routePaths.articleDynamic(article.slug)} onClick={() => {
+              dispatch(DataApiRequests.loadArticleDetails(article.slug));
+            }}>{article.title}</Link>
+            <div className={`${postClass}__likes`}>
+              <button
+                type="button"
+                className={likeStatusClass}
+                disabled={!authorizationStatus}
+                onClick={onLikeClick}
+              />
+              <span className={`${postClass}__likes-count`}>{likesCount}</span>
             </div>
           </div>
-          <div className="post__tags">
+          <div className={`${postClass}__tags`}>
             {tagsList()}
           </div>
-          <div className="post__description">
-            {post.description}
+          <div className={`${postClass}__description`}>
+            {article.description}
           </div>
         </div>
-        <div className="post-author">
-          <div className="post-author__name-wrapper">
-            <span className="post-author__name">{post.author.username}</span>
-            <span className="post-author__date">{postDate}</span>
+        <div className={postAuthorClass}>
+          <div className={`${postAuthorClass}__name-wrapper`}>
+            <span className={`${postAuthorClass}__name`}>{article.author.username}</span>
+            <span className={`${postAuthorClass}__date`}>{articleDate}</span>
           </div>
-          <img src={post.author.image ? `${post.author.image}` : `user.png`} alt="user-avatar" width="46" height="46"/>
+          <img src={article.author.image ? `${article.author.image}` : `user.png`} alt="user-avatar" width="46" height="46"/>
 
         </div>
       </article>
@@ -64,8 +77,8 @@ const Post = ({ post }) => {
   )
 };
 
-Post.propTypes = {
-  post: PropTypes.shape({
+Article.propTypes = {
+  article: PropTypes.shape({
     author: PropTypes.shape({
       bio: PropTypes.oneOfType([
         PropTypes.string.isRequired,
@@ -87,4 +100,4 @@ Post.propTypes = {
   }).isRequired
 }
 
-export default Post;
+export default Article;

@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import './pagination.css';
 import 'antd/dist/antd.css';
 
-import { Operation, ARTICLES_COUNT_TO_SHOW } from '../../reducer/data/data';
+import { ActionCreator } from '../../reducer/data/data';
+import { ARTICLES_COUNT_TO_SHOW, DataApiRequests } from '../../api';
 
 
 const Pagination = ({ onPageNumberClick, currentPage }) => {
@@ -13,8 +14,10 @@ const Pagination = ({ onPageNumberClick, currentPage }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(Operation.getPagesCount());
+    dispatch(DataApiRequests.getPagesCount());
   }, [articlesCount, dispatch])
+
+  useEffect(() => dispatch(ActionCreator.setLoadingStatus(null)))
 
   return (
     <>
@@ -26,8 +29,8 @@ const Pagination = ({ onPageNumberClick, currentPage }) => {
           <AntdPagination
             current={currentPage}
             size="small"
-            total={`${articlesCount}`}
-            pageSize={`${ARTICLES_COUNT_TO_SHOW}`}
+            total={articlesCount}
+            pageSize={ARTICLES_COUNT_TO_SHOW}
             showSizeChanger={false}
             onChange={(page) => {
               onPageNumberClick(+page);

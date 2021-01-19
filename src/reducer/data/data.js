@@ -1,5 +1,3 @@
-const ARTICLES_COUNT_TO_SHOW = 20;
-
 const initialState = {
   articles: null,
   isLoading: true,
@@ -38,45 +36,6 @@ const ActionCreator = {
     })
 };
 
-const Operation = {
-  getPagesCount: () => (dispatch, getState, api) => {
-    dispatch(ActionCreator.setLoadingStatus(true));
-
-    return api.get(`/articles`)
-      .then((response) => {
-        const { data } = response;
-        dispatch(ActionCreator.setPagesCount(data.articlesCount));
-      })
-      .catch((err) => {
-        throw err;
-      });
-  },
-  loadArticles: (currentPage) => (dispatch, getState, api) => {
-    const articlesCountToOffset = (currentPage - 1) * ARTICLES_COUNT_TO_SHOW;
-    dispatch(ActionCreator.loadArticles(null));
-
-    return api.get(`/articles?offset=${articlesCountToOffset}`)
-      .then((response) => {
-        dispatch(ActionCreator.loadArticles(response.data.articles));
-      })
-      .catch((err) => {
-        throw err;
-      });
-  },
-  loadArticleDetails: (slug) => (dispatch, getState, api) => {
-    dispatch(ActionCreator.setLoadingStatus(true));
-
-    return api.get(`/articles/${slug}`)
-      .then((response) => {
-        dispatch(ActionCreator.loadArticleDetails(response.data.article));
-      })
-      .catch((err) => {
-        dispatch(ActionCreator.setFetchError(true));
-        throw err;
-      });
-  },
-};
-
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.SET_PAGES_COUNT:
@@ -112,4 +71,4 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export {reducer, ActionType, ActionCreator, Operation, ARTICLES_COUNT_TO_SHOW};
+export {reducer, ActionType, ActionCreator};

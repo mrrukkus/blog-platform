@@ -13,18 +13,23 @@ import routePaths, { localStorageActions } from '../../routes';
 import '../create-new-article/create-new-article.css';
 import 'antd/dist/antd.css';
 
-const EditArticle = (props) => {
+
+const ArticleForm = (props) => {
   const dispatch = useDispatch();
   const {
     match: {
       params: {slug}
-    }
+    },
+    match: {path}
   } = props;
 
   const isSuccess = useSelector((state) => state.ARTICLES.isSuccess);
   const isLoading = useSelector((state) => state.ARTICLES.isLoading);
 
   const currentUserName = JSON.parse(localStorageActions.getUser()).username;
+
+  const newArticleClass = 'new-article';
+
 
   const [newTagValue, setNewTagValue] = useState('');
   const [articleData, setArticleData] = useState({
@@ -35,28 +40,39 @@ const EditArticle = (props) => {
     articleAuthor: ''
   });
 
-  const { titleValue, descriptionValue, textValue, tagsList, articleAuthor } = articleData;
-
   useEffect(() => {
-    api.get(`articles/${slug}`)
-      .then((res) => {
-        const { title, description, body, tagList, author } = res.data.article;
-        setArticleData({
-          titleValue: title,
-          descriptionValue: description,
-          textValue: body,
-          tagsList: tagList,
-          articleAuthor: author
-        });
-        dispatch(ActionCreator.setIsLoading(false));
-      })
-      .catch((err) => { throw err });
-  }, [slug, dispatch]);
+    if (path === routePaths.articleEditStatic) {
+      api.get(`articles/${slug}`)
+        .then((res) => {
+          const { title, description, body, tagList, author } = res.data.article;
+          setArticleData({
+            titleValue: title,
+            descriptionValue: description,
+            textValue: body,
+            tagsList: tagList,
+            articleAuthor: author
+          });
+          dispatch(ActionCreator.setIsLoading(false));
+        })
+        .catch((err) => { throw err });
+    }
+    if (path === routePaths.newArticle) {
+      setArticleData({
+        titleValue: '',
+        descriptionValue: '',
+        textValue: '',
+        tagsList: [],
+        articleAuthor: ''
+      });
+      dispatch(ActionCreator.setIsLoading(false));
+    }
+  }, [slug, dispatch, path]);
 
   useEffect(() => () => {
-      dispatch(ActionCreator.setSuccess(null));
-    }, [dispatch]);
+    dispatch(ActionCreator.setSuccess(null));
+  }, [dispatch]);
 
+  const { titleValue, descriptionValue, textValue, tagsList, articleAuthor } = articleData;
 
   const onTagAdd = (evt) => {
     evt.preventDefault();
@@ -71,35 +87,59 @@ const EditArticle = (props) => {
     setArticleData({...articleData, tagsList: newTagsList});
   }, [tagsList, articleData]);
 
-  const editedArticleSubmit = (evt) => {
+  const TagsMarkup = useMemo(() => tagsList?.map((tag, i) => (
+    <div className={`${newArticleClass}__tag-container`} key={Math.random()}>
+      <input type="text" className={`${newArticleClass}__tag-title`} placeholder="Tag" value={tag} disabled/>
+      <button type='button' className="button button--delete" onClick={() => onTagDelete(i)}>Delete</button>
+    </div>
+  )
+), [tagsList, onTagDelete]);
+
+  const articleSubmit = (evt) => {
     evt.preventDefault();
-    const editedArticle = {
+    const dataArticle = {
       "title": titleValue,
       "description": descriptionValue,
       "body": textValue,
       "tagList": tagsList
     };
-
-    dispatch(ArticlesApiRequests.putEditedArticle(editedArticle, slug));
-    dispatch(ActionCreator.setIsLoading(true));
+    if (path === routePaths.articleEditStatic) {
+      dispatch(ArticlesApiRequests.putEditedArticle(dataArticle, slug));
+      dispatch(ActionCreator.setIsLoading(true));
+    }
+    if (path === routePaths.newArticle) {
+      dispatch(ArticlesApiRequests.addNewArticle(dataArticle));
+      dispatch(ActionCreator.setIsLoading(true));
+    }
   };
 
-  const TagsMarkup = useMemo(() => tagsList?.map((tag, i) => (
-      <div className="new-article__tag-container" key={Math.random()}>
-        <input type="text" className="new-article__tag-title" placeholder="Tag" value={tag} disabled="true"/>
-        <button type='button' className="button button--delete" onClick={() => onTagDelete(i)}>Delete</button>
-      </div>
-    )
-  ), [tagsList, onTagDelete]);
+  const getFormHeader = () => {
+    if (path === routePaths.articleEditStatic) {
+      return 'Edit article'
+    }
+    if (path === routePaths.newArticle) {
+      return 'Create new article'
+    }
+    return null
+  };
+
+
+  if (path === routePaths.articleEditStatic) {
+    if (articleAuthor.username && (isSuccess || currentUserName !== articleAuthor.username)) {
+      return <Redirect to={routePaths.main} />
+    }
+  }
+  if (path === routePaths.newArticle && isSuccess) {
+    return <Redirect to={routePaths.main} />
+  }
 
   return (
     <>
-      {articleAuthor.username && ((isSuccess || currentUserName !== articleAuthor.username) && <Redirect to={routePaths.main}/>)}
       <Header/>
         <Main>
           {isLoading ? <Spin /> :
-            <form className="new-article" onSubmit={editedArticleSubmit}>
-              <h2>Edit article</h2>
+            <form className={newArticleClass} onSubmit={articleSubmit}>
+              <h2>{getFormHeader()}</h2>
               <label htmlFor="title">Title</label>
               <input disabled={isLoading} type="text" id="title" placeholder="Title"
               value={titleValue}
@@ -115,16 +155,16 @@ const EditArticle = (props) => {
               }}/>
 
               <label htmlFor="text">Text</label>
-              <textarea disabled={isLoading} name="Text" id="text" cols="30" rows="10" className="new-article__text" placeholder="Text"
+              <textarea disabled={isLoading} name="Text" id="text" cols="30" rows="10" className={`${newArticleClass}__text`} placeholder="Text"
               value={textValue}
               onChange={(evt) => {
                 setArticleData({...articleData, textValue: evt.target.value});
               }}/>
 
-              <div className="new-article__tags">
+              <div className={`${newArticleClass}__tags`}>
                 <h3>Tags</h3>
                 {TagsMarkup}
-                <div className="new-article__new-tag-container">
+                <div className={`${newArticleClass}__new-tag-container`}>
                   <input disabled={isLoading} type="text" className="new-article__tag-title" placeholder="Tag" value={newTagValue} onChange={(evt) => {
                     setNewTagValue(evt.target.value);
                   }}/>
@@ -132,17 +172,16 @@ const EditArticle = (props) => {
                 </div>
               </div>
 
-              <button type='submit' className="new-article__submit-button" disabled={isLoading}>Send</button>
+              <button type='submit' className={`${newArticleClass}__submit-button`} disabled={isLoading}>Send</button>
               {isSuccess === false && <span className="error">Возникла ошибка</span>}
             </form>
           }
-
         </Main>
     </>
   )
 };
 
-EditArticle.propTypes = {
+ArticleForm.propTypes = {
   match: PropTypes.shape({
     isExact: PropTypes.bool,
     params: PropTypes.objectOf(PropTypes.string),
@@ -151,4 +190,4 @@ EditArticle.propTypes = {
   }).isRequired,
 }
 
-export default EditArticle;
+export default ArticleForm;

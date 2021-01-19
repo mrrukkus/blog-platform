@@ -6,12 +6,12 @@ import './article-list.css';
 
 import Header from '../header/header';
 import Main from '../main/main';
-import Post from '../article/article';
+import Article from '../article/article';
 import Pagination from '../pagination/pagination';
-import { Operation, ActionCreator } from '../../reducer/data/data';
+import { ActionCreator } from '../../reducer/data/data';
+import { DataApiRequests } from '../../api';
 
-
-const getPosts = (posts) => posts.map((post) => <Post post={post} key={post.createdAt} />);
+const getPosts = (articles) => articles.map((article) => <Article article={article} key={article.createdAt} />);
 
 const ArticleList = () => {
   const dispatch = useDispatch();
@@ -20,10 +20,10 @@ const ArticleList = () => {
   const loadedArticles = useSelector((state) => state.DATA.articles);
 
   useEffect(() => {
-    dispatch(Operation.loadArticles(currentPage));
+    dispatch(DataApiRequests.loadArticles(currentPage));
 
     return () => {
-      dispatch(ActionCreator.setLoadingStatus(null));
+      dispatch(ActionCreator.setLoadingStatus(false));
     }
   }, [currentPage, dispatch]);
 
