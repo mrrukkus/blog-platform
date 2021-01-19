@@ -15,7 +15,7 @@ import { popupFormClass } from '../edit-profile/edit-profile';
 const CreateNewAccount = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => dispatch(ActionCreator.setSuccess(null)));
+  useEffect(() => dispatch(ActionCreator.setSuccess(null)), [dispatch]);
 
   const authStatus = useSelector((state) => state.USER.authorizationStatus);
   const fetchErrors = useSelector((state) => state.USER.errors);
